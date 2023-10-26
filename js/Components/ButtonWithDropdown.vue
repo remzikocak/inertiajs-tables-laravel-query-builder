@@ -6,8 +6,10 @@
         type="button"
         :dusk="dusk"
         :disabled="disabled"
-        class="w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        :class="{'border-green-300': active, 'border-gray-300': !active, 'cursor-not-allowed': disabled }"
+        :class="[
+            getTheme('button', preStyle),
+            {'border-green-300': active, 'border-gray-300': !active, 'cursor-not-allowed': disabled },
+        ]"
         aria-haspopup="true"
         @click.prevent="toggle"
       >
@@ -32,7 +34,7 @@ import OnClickOutside from "./OnClickOutside.vue";
 import { createPopper } from "@popperjs/core/lib/popper-lite";
 import preventOverflow from "@popperjs/core/lib/modifiers/preventOverflow";
 import flip from "@popperjs/core/lib/modifiers/flip";
-import { ref, watch, onMounted } from "vue";
+import {ref, watch, onMounted, inject} from "vue";
 
 const props = defineProps({
     placement: {
@@ -56,6 +58,12 @@ const props = defineProps({
     disabled: {
         type: Boolean,
         default: false,
+        required: false,
+    },
+
+    preStyle: {
+        type: String,
+        default: 'default',
         required: false,
     },
 });
@@ -86,4 +94,30 @@ onMounted(() => {
 });
 
 defineExpose({ hide });
+
+// Theme
+const commonClasses = "w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
+const fallbackTheme = {
+    inertia_table: {
+        button_with_dropdown: {
+            button: {
+                default: `${commonClasses} focus:ring-indigo-500`,
+                dootix: `${commonClasses} focus:ring-cyan-500`,
+            },
+        },
+    },
+}
+const themeVariables = inject('themeVariables');
+const getTheme = (type, name) => {
+    if (
+        "inertia_table" in themeVariables &&
+        "button_with_dropdown" in themeVariables.inertia_table &&
+        type in themeVariables.inertia_table.button_with_dropdown &&
+        name in themeVariables.inertia_table.button_with_dropdown[type]
+    ) {
+        return themeVariables.inertia_table.button_with_dropdown[type][name];
+    } else {
+        return fallbackTheme.inertia_table.button_with_dropdown[type][name];
+    }
+}
 </script>

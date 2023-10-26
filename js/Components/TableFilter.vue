@@ -3,6 +3,7 @@
     placement="bottom-end"
     dusk="filters-dropdown"
     :active="hasEnabledFilters"
+    :pre-style="preStyle"
   >
     <template #button>
       <svg
@@ -41,7 +42,7 @@
             v-if="filter.type === 'select'"
             :name="filter.key"
             :value="filter.value"
-            class="block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm text-sm border-gray-300 rounded-md"
+            :class="getTheme('select', preStyle)"
             @change="onFilterChange(filter.key, $event.target.value)"
           >
             <option
@@ -60,6 +61,7 @@
 
 <script setup>
 import ButtonWithDropdown from "./ButtonWithDropdown.vue";
+import {inject} from "vue";
 
 defineProps({
     hasEnabledFilters: {
@@ -76,6 +78,38 @@ defineProps({
         type: Function,
         required: true,
     },
+
+    preStyle: {
+        type: String,
+        default: 'default',
+        required: false,
+    },
 });
+
+// Theme
+const commonClasses = "block w-full shadow-sm text-sm border-gray-300 rounded-md"
+const fallbackTheme = {
+    inertia_table: {
+        table_filter: {
+            select: {
+                default: `${commonClasses} focus:ring-indigo-500 focus:border-indigo-500`,
+                dootix: `${commonClasses} focus:ring-cyan-500 focus:border-cyan-500`,
+            },
+        },
+    },
+}
+const themeVariables = inject('themeVariables');
+const getTheme = (type, name) => {
+    if (
+        "inertia_table" in themeVariables &&
+        "table_filter" in themeVariables.inertia_table &&
+        type in themeVariables.inertia_table.table_filter &&
+        name in themeVariables.inertia_table.table_filter[type]
+    ) {
+        return themeVariables.inertia_table.table_filter[type][name];
+    } else {
+        return fallbackTheme.inertia_table.table_filter[type][name];
+    }
+}
 </script>
 

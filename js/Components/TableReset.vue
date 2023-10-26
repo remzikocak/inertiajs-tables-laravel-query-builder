@@ -3,7 +3,7 @@
     ref="button"
     type="button"
     dusk="reset-table"
-    class="w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 border-gray-300"
+    :class="getTheme('button', preStyle)"
     aria-haspopup="true"
     @click.prevent="onClick"
   >
@@ -24,10 +24,44 @@
 </template>
 
 <script setup>
+import {inject} from "vue";
+
 defineProps({
     onClick: {
         type: Function,
         required: true
-    }
+    },
+
+    preStyle: {
+        type: String,
+        default: 'default',
+        required: false,
+    },
 });
+
+// Theme
+const commonClasses = "w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 border-gray-300"
+const fallbackTheme = {
+    inertia_table: {
+        reset_button: {
+            button: {
+                default: `${commonClasses} focus:ring-indigo-500`,
+                dootix: `${commonClasses} focus:ring-cyan-500`,
+            },
+        },
+    },
+}
+const themeVariables = inject('themeVariables');
+const getTheme = (type, name) => {
+    if (
+        "inertia_table" in themeVariables &&
+        "reset_button" in themeVariables.inertia_table &&
+        type in themeVariables.inertia_table.reset_button &&
+        name in themeVariables.inertia_table.reset_button[type]
+    ) {
+        return themeVariables.inertia_table.reset_button[type][name];
+    } else {
+        return fallbackTheme.inertia_table.reset_button[type][name];
+    }
+}
 </script>

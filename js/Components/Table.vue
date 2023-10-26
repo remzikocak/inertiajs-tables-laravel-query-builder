@@ -21,6 +21,7 @@
               :has-enabled-filters="queryBuilderProps.hasEnabledFilters"
               :filters="queryBuilderProps.filters"
               :on-filter-change="changeFilterValue"
+              :pre-style="preStyle"
             />
           </slot>
         </div>
@@ -57,7 +58,7 @@
             v-if="canBeReset"
             class="order-5 sm:order-3 sm:mr-4 ml-auto"
           >
-            <TableReset :on-click="resetQuery" />
+            <TableReset :on-click="resetQuery" :pre-style="preStyle" />
           </div>
         </slot>
 
@@ -74,6 +75,7 @@
             :search-inputs="queryBuilderProps.searchInputsWithoutGlobal"
             :has-search-inputs-without-value="queryBuilderProps.hasSearchInputsWithoutValue"
             :on-add="showSearchInput"
+            :pre-style="preStyle"
           />
         </slot>
 
@@ -90,6 +92,7 @@
             :columns="queryBuilderProps.columns"
             :has-hidden-columns="queryBuilderProps.hasHiddenColumns"
             :on-change="changeColumnStatus"
+            :pre-style="preStyle"
           />
         </slot>
       </div>
@@ -107,6 +110,7 @@
           :forced-visible-search-inputs="forcedVisibleSearchInputs"
           :on-change="changeSearchInputValue"
           :on-remove="disableSearchInput"
+          :pre-style="preStyle"
         />
       </slot>
 
@@ -181,6 +185,7 @@
               :meta="resourceMeta"
               :per-page-options="queryBuilderProps.perPageOptions"
               :on-per-page-change="onPerPageChange"
+              :pre-style="preStyle"
             />
           </slot>
         </TableWrapper>
@@ -277,7 +282,7 @@ const props = defineProps({
         type: String,
         default: 'default',
         required: false,
-    }
+    },
 });
 
 const app = getCurrentInstance();

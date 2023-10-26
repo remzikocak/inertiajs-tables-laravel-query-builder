@@ -3,7 +3,7 @@
     name="per_page"
     :dusk="dusk"
     :value="value"
-    class="block focus:ring-indigo-500 focus:border-indigo-500 min-w-max shadow-sm text-sm border-gray-300 rounded-md"
+    :class="getTheme('select', preStyle)"
     @change="onChange($event.target.value)"
   >
     <option
@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import {computed, inject} from "vue";
 import uniq from "lodash-es/uniq";
 import { getTranslations } from "../translations.js";
 
@@ -48,6 +48,12 @@ const props = defineProps({
         type: Function,
         required: true,
     },
+
+    preStyle: {
+        type: String,
+        default: 'default',
+        required: false,
+    },
 });
 
 const perPageOptions = computed(() => {
@@ -57,5 +63,31 @@ const perPageOptions = computed(() => {
 
     return uniq(options).sort((a, b) => a - b);
 });
+
+// Theme
+const commonClasses = "block min-w-max shadow-sm text-sm border-gray-300 rounded-md"
+const fallbackTheme = {
+    inertia_table: {
+        per_page_selector: {
+            select: {
+                default: `${commonClasses} focus:ring-indigo-500 focus:border-indigo-500`,
+                dootix: `${commonClasses} focus:ring-cyan-500 focus:border-cyan-500`,
+            },
+        },
+    },
+}
+const themeVariables = inject('themeVariables');
+const getTheme = (type, name) => {
+    if (
+        "inertia_table" in themeVariables &&
+        "per_page_selector" in themeVariables.inertia_table &&
+        type in themeVariables.inertia_table.per_page_selector &&
+        name in themeVariables.inertia_table.per_page_selector[type]
+    ) {
+        return themeVariables.inertia_table.per_page_selector[type][name];
+    } else {
+        return fallbackTheme.inertia_table.per_page_selector[type][name];
+    }
+}
 </script>
 

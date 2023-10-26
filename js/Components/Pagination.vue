@@ -45,6 +45,7 @@
         :value="perPage"
         :options="perPageOptions"
         :on-change="onPerPageChange"
+        :pre-style="preStyle"
       />
       <component
         :is="nextPageUrl ? 'a' : 'div'"
@@ -86,6 +87,7 @@
           :value="perPage"
           :options="perPageOptions"
           :on-change="onPerPageChange"
+          :pre-style="preStyle"
         />
 
         <p class="hidden lg:block text-sm text-gray-700 grow">
@@ -217,7 +219,12 @@ const props = defineProps({
     meta: {
         type: Object,
         required: false,
-    }
+    },
+    preStyle: {
+        type: String,
+        default: 'default',
+        required: false,
+    },
 });
 
 const hasLinks = computed(() => {

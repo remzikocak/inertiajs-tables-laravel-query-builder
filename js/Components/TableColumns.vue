@@ -3,6 +3,7 @@
     placement="bottom-end"
     dusk="columns-dropdown"
     :active="hasHiddenColumns"
+    :pre-style="preStyle"
   >
     <template #button>
       <svg
@@ -92,6 +93,12 @@ const props = defineProps({
     onChange: {
         type: Function,
         required: true,
+    },
+
+    preStyle: {
+        type: String,
+        default: 'default',
+        required: false,
     },
 });
 </script>

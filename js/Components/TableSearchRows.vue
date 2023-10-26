@@ -31,14 +31,14 @@
         :name="searchInput.key"
         :value="searchInput.value"
         type="text"
-        class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 text-sm border-gray-300"
+        :class="getTheme('input', preStyle)"
         @input="onChange(searchInput.key, $event.target.value)"
       >
       <div
         class="absolute inset-y-0 right-0 pr-3 flex items-center"
       >
         <button
-          class="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          :class="getTheme('remove_button', preStyle)"
           :dusk="`remove-search-row-${searchInput.key}`"
           @click.prevent="onRemove(searchInput.key)"
         >
@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, nextTick } from "vue";
+import {computed, ref, watch, nextTick, inject} from "vue";
 import find from "lodash-es/find";
 
 const skipUnwrap = { el: ref([]) };
@@ -90,6 +90,12 @@ const props = defineProps({
         type: Function,
         required: true,
     },
+
+    preStyle: {
+        type: String,
+        default: 'default',
+        required: false,
+    },
 });
 
 function isForcedVisible(key) {
@@ -113,5 +119,36 @@ watch(props.forcedVisibleSearchInputs, (inputs) => {
         }
     });
 }, { immediate: true });
+
+// Theme
+const commonInputClasses = "flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md text-sm border-gray-300"
+const commonRemoveButtonClasses = "rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
+const fallbackTheme = {
+    inertia_table: {
+        table_search_rows: {
+            input: {
+                default: `${commonInputClasses} focus:ring-indigo-500 focus:border-indigo-500`,
+                dootix: `${commonInputClasses} focus:ring-cyan-500 focus:border-cyan-500`,
+            },
+            remove_button: {
+                default: `${commonRemoveButtonClasses} focus:ring-indigo-500`,
+                dootix: `${commonRemoveButtonClasses} focus:ring-cyan-500`,
+            },
+        },
+    },
+}
+const themeVariables = inject('themeVariables');
+const getTheme = (type, name) => {
+    if (
+        "inertia_table" in themeVariables &&
+        "table_search_rows" in themeVariables.inertia_table &&
+        type in themeVariables.inertia_table.table_search_rows &&
+        name in themeVariables.inertia_table.table_search_rows[type]
+    ) {
+        return themeVariables.inertia_table.table_search_rows[type][name];
+    } else {
+        return fallbackTheme.inertia_table.table_search_rows[type][name];
+    }
+}
 </script>
 

@@ -128,7 +128,7 @@ const fallbackTheme = {
         table_search_rows: {
             input: {
                 default: `${commonInputClasses} focus:ring-indigo-500 focus:border-indigo-500`,
-                dootix: `${commonInputClasses} focus:ring-cyan-500 focus:border-cyan-500`,
+                dootix: `${commonInputClasses} focus:ring-cyan-500 focus:border-blue-500`,
             },
             remove_button: {
                 default: `${commonRemoveButtonClasses} focus:ring-indigo-500`,

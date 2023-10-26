@@ -71,7 +71,7 @@ const fallbackTheme = {
         per_page_selector: {
             select: {
                 default: `${commonClasses} focus:ring-indigo-500 focus:border-indigo-500`,
-                dootix: `${commonClasses} focus:ring-cyan-500 focus:border-cyan-500`,
+                dootix: `${commonClasses} focus:ring-cyan-500 focus:border-blue-500`,
             },
         },
     },

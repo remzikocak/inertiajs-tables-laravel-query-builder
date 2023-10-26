@@ -93,7 +93,7 @@ const fallbackTheme = {
         table_filter: {
             select: {
                 default: `${commonClasses} focus:ring-indigo-500 focus:border-indigo-500`,
-                dootix: `${commonClasses} focus:ring-cyan-500 focus:border-cyan-500`,
+                dootix: `${commonClasses} focus:ring-cyan-500 focus:border-blue-500`,
             },
         },
     },

@@ -133,7 +133,16 @@
                       v-for="column in queryBuilderProps.columns"
                       :key="`table-${name}-header-${column.key}`"
                       :cell="header(column.key)"
-                    />
+                    >
+                      <template #label>
+                        <slot
+                          :name="`header(${column.key})`"
+                          :label="header(column.key).label"
+                          :column="header(column.key)"
+                        >
+                        </slot>
+                      </template>
+                    </HeaderCell>
                   </tr>
                 </slot>
               </thead>

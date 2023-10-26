@@ -292,6 +292,20 @@ When using *auto-fill*, you may want to transform the presented data for a speci
 </template>
 ```
 
+#### Custom header cells
+
+When using *auto-fill*, you may want to transform the presented data for a specific header while leaving the other columns untouched. For this, you may use a header template. This example is taken from the [Example Controller](#example-controller) above.
+
+```vue
+<template>
+  <Table :resource="users">
+    <template #header(email)="{ label: label, column: column }">
+      <span class="lowercase">{{ label }}</span>
+    </template>
+  </Table>
+</template>
+```
+
 #### Multiple tables per page
 
 You may want to use more than one table component per page. Displaying the data is easy, but using features like filtering, sorting, and pagination requires a slightly different setup. For example, by default, the `page` query key is used for paginating the data set, but now you want two different keys for each table. Luckily, this package takes care of that and even provides a helper method to support Spatie's query package. To get this to work, you need to *name* your tables.

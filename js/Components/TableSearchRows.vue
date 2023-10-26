@@ -111,7 +111,7 @@ watch(props.forcedVisibleSearchInputs, (inputs) => {
 
     nextTick().then(() => {
         const inputElement = find(el.value, (el) => {
-            return el.__vnode.key ===  latestInput;
+            return el.name ===  latestInput;
         });
 
         if(inputElement) {

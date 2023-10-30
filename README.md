@@ -401,19 +401,20 @@ setTranslations({
 
 The `Table.vue` has several slots that you can use to inject your own implementations.
 
-| Slot | Description |
-| --- | --- |
-| tableFilter | The location of the button + dropdown to select filters. |
-| tableGlobalSearch | The location of the input element that handles the global search. |
-| tableReset | The location of the button that resets the table. |
-| tableAddSearchRow | The location of the button + dropdown to add additional search rows. |
-| tableColumns | The location of the button + dropdown to toggle columns. |
-| tableSearchRows | The location of the input elements that handle the additional search rows. |
-| tableWrapper | The component that *wraps* the table element, handling overflow, shadow, padding, etc. |
-| table | The actual table element. |
-| head | The location of the table header. |
-| body | The location of the table body.  |
-| pagination | The location of the paginator. |
+| Slot              | Description                                                                            |
+|-------------------|----------------------------------------------------------------------------------------|
+| tableFilter       | The location of the button + dropdown to select filters.                               |
+| tableGlobalSearch | The location of the input element that handles the global search.                      |
+| tableReset        | The location of the button that resets the table.                                      |
+| tableAddSearchRow | The location of the button + dropdown to add additional search rows.                   |
+| tableColumns      | The location of the button + dropdown to toggle columns.                               |
+| tableSearchRows   | The location of the input elements that handle the additional search rows.             |
+| tableWrapper      | The component that *wraps* the table element, handling overflow, shadow, padding, etc. |
+| table             | The actual table element.                                                              |
+| head              | The location of the table header.                                                      |
+| body              | The location of the table body.                                                        |
+| pagination        | The location of the paginator.                                                         |
+| pre-style         | The style of the table                                                                 |
 
 Each slot is provided with props to interact with the parent `Table` component.
 
@@ -428,6 +429,121 @@ Each slot is provided with props to interact with the parent `Table` component.
     </template>
   </Table>
 </template>
+```
+
+### Customizations available
+
+You can customize some parts of the table.
+
+Provide an object with the desired customizations in `app.js` file like this:
+```javascript
+const themeVariables = {
+    inertia_table: {
+        per_page_selector: {
+            select: {
+                default: 'your classes',
+            },
+        },
+    },
+}
+
+createInertiaApp({
+    progress: {
+        color: '#4B5563',
+    },
+    title: (title) => `${title} - ${appName}`,
+    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+    setup({ el, App, props, plugin }) {
+        return createApp({ render: () => h(App, props) })
+            // ...
+            .provide('themeVariables', themeVariables)
+            // ...
+            .mount(el);
+    },
+})
+```
+
+You can customize the default style by overiding the default style like that: 
+
+```javascript
+const themeVariables = {
+    inertia_table: {
+        per_page_selector: {
+            select: {
+                default: 'block min-w-max shadow-sm text-sm border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500',
+            },
+        },
+    },
+}
+```
+
+Or you can create a new style and using the `pre-style` prop on the `Table.vue`
+
+```javascript
+const themeVariables = {
+    inertia_table: {
+        per_page_selector: {
+            select: {
+                red_style: 'block min-w-max shadow-sm text-sm border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500',
+            },
+        },
+    },
+}
+```
+
+```vue
+<template>
+  <Table pre-style="red_style" />
+</template>
+```
+
+Available customizations
+
+```javascript
+const themeVariables = {
+    inertia_table: {
+        button_with_dropdown: {
+            button: {
+                default: 'w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
+                dootix: 'w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+            },
+        },
+        per_page_selector: {
+            select: {
+                default: 'block min-w-max shadow-sm text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500',
+                dootix: 'block min-w-max shadow-sm text-sm border-gray-300 rounded-md focus:ring-cyan-500 focus:border-blue-500',
+            },
+        },
+        table_filter: {
+            select: {
+                default: 'block w-full shadow-sm text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500',
+                dootix: 'block w-full shadow-sm text-sm border-gray-300 rounded-md focus:ring-cyan-500 focus:border-blue-500',
+            },
+        },
+        global_search: {
+            input: {
+                default: "block w-full pl-9 text-sm rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300",
+                dootix: "block w-full pl-9 text-sm rounded-md shadow-sm focus:ring-cyan-500 focus:border-blue-500 border-gray-300",
+            },
+        },
+        reset_button: {
+            button: {
+                default: 'w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 border-gray-300 focus:ring-indigo-500',
+                dootix: 'w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 border-gray-300 focus:ring-cyan-500',
+            },
+        },
+        table_search_rows: {
+            input: {
+                default: 'flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md text-sm border-gray-300 focus:ring-indigo-500 focus:border-indigo-500',
+                dootix: 'flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md text-sm border-gray-300 focus:ring-cyan-500 focus:border-blue-500',
+            },
+            remove_button: {
+                default: 'rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
+                dootix: 'rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+            },
+        },
+    },
+}
 ```
 
 ## Testing

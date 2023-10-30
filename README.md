@@ -276,6 +276,10 @@ The `Table` has some additional properties to tweak its front-end behaviour.
 | inputDebounceMs | Number of ms to wait before refreshing the table on user input. | 350 |
 | preserveScroll | Configures the [Scroll preservation](https://inertiajs.com/scroll-management#scroll-preservation) behavior. You may also pass `table-top` to this property to scroll to the top of the table on new data. | false |
 
+The `Table` has some events that you can use
+
+* rowClicked: this event is fired when the user click on the row. The event give you this informations: event, item, key. Be careful if you use this event with a clickable element inside the row like an action button. Don't forget to use `event.stopPropagation()` for all other clickable elements
+
 #### Custom column cells
 
 When using *auto-fill*, you may want to transform the presented data for a specific column while leaving the other columns untouched. For this, you may use a cell template. This example is taken from the [Example Controller](#example-controller) above.

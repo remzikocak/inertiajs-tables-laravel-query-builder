@@ -160,6 +160,7 @@
                       'hover:bg-gray-100': striped,
                       'hover:bg-gray-50': !striped
                     }"
+                    @click="rowClicked($event, item, key)"
                   >
                     <td
                       v-for="column in queryBuilderProps.columns"
@@ -223,6 +224,8 @@ import isEqual from "lodash-es/isEqual";
 import map from "lodash-es/map";
 import pickBy from "lodash-es/pickBy";
 import {router, usePage} from "@inertiajs/vue3";
+
+const emit = defineEmits(['rowClicked'])
 
 const props = defineProps({
     inertia: {
@@ -657,6 +660,10 @@ function visit(url) {
             }
         }
     );
+}
+
+function  rowClicked(event, item, key) {
+    emit('rowClicked', event, item, key)
 }
 
 watch(queryBuilderData, () => {

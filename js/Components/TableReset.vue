@@ -19,12 +19,15 @@
         clip-rule="evenodd"
       />
     </svg>
-    <span>Reset</span>
+    <span>{{ translations.reset ?? 'Reset' }}</span>
   </button>
 </template>
 
 <script setup>
 import {inject} from "vue";
+import { getTranslations } from "../translations.js";
+
+const translations = getTranslations();
 
 defineProps({
     onClick: {

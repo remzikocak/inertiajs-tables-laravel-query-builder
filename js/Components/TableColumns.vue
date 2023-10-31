@@ -2,17 +2,12 @@
   <ButtonWithDropdown
     placement="bottom-end"
     dusk="columns-dropdown"
-    :active="hasHiddenColumns"
     :pre-style="preStyle"
   >
     <template #button>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5"
-        :class="{
-          'text-gray-400': !hasHiddenColumns,
-          'text-green-400': hasHiddenColumns,
-        }"
+        class="h-5 w-5 text-gray-400"
         viewBox="0 0 20 20"
         fill="currentColor"
       >
@@ -23,6 +18,7 @@
           clip-rule="evenodd"
         />
       </svg>
+      <span v-if="hasHiddenColumns" class="ml-1">({{ hiddenColumnsCount }})</span>
     </template>
 
     <div
@@ -78,6 +74,7 @@
 <script setup>
 import ButtonWithDropdown from "./ButtonWithDropdown.vue";
 import { usePage } from "@inertiajs/vue3";
+import {computed} from "vue";
 
 const props = defineProps({
     columns: {
@@ -101,4 +98,8 @@ const props = defineProps({
         required: false,
     },
 });
+
+const hiddenColumnsCount = computed(() => {
+  return props.columns.filter((c) => c.hidden).length
+})
 </script>

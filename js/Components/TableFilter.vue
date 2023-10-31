@@ -2,17 +2,12 @@
   <ButtonWithDropdown
     placement="bottom-end"
     dusk="filters-dropdown"
-    :active="hasEnabledFilters"
     :pre-style="preStyle"
   >
     <template #button>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5"
-        :class="{
-          'text-gray-400': !hasEnabledFilters,
-          'text-green-400': hasEnabledFilters,
-        }"
+        class="h-5 w-5 text-gray-400"
         viewBox="0 0 20 20"
         fill="currentColor"
       >
@@ -22,6 +17,7 @@
           clip-rule="evenodd"
         />
       </svg>
+      <span v-if="hasEnabledFilters" class="ml-1">({{ activeFiltersCount }})</span>
     </template>
 
     <div
@@ -61,9 +57,9 @@
 
 <script setup>
 import ButtonWithDropdown from "./ButtonWithDropdown.vue";
-import {inject} from "vue";
+import {computed, inject} from "vue";
 
-defineProps({
+const props = defineProps({
     hasEnabledFilters: {
         type: Boolean,
         required: true,
@@ -85,6 +81,10 @@ defineProps({
         required: false,
     },
 });
+
+const activeFiltersCount = computed(() => {
+  return props.filters.filter((f) => f.value).length
+})
 
 // Theme
 const commonClasses = "block w-full shadow-sm text-sm border-gray-300 rounded-md"

@@ -8,7 +8,7 @@
         :disabled="disabled"
         :class="[
             getTheme('button', preStyle),
-            {'border-green-300': active, 'border-gray-300': !active, 'cursor-not-allowed': disabled },
+            {'cursor-not-allowed': disabled },
         ]"
         aria-haspopup="true"
         @click.prevent="toggle"
@@ -96,7 +96,7 @@ onMounted(() => {
 defineExpose({ hide });
 
 // Theme
-const commonClasses = "w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
+const commonClasses = "w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 border-gray-300"
 const fallbackTheme = {
     inertia_table: {
         button_with_dropdown: {

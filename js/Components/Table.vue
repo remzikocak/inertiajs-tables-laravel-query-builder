@@ -49,19 +49,6 @@
         </div>
 
         <slot
-          name="tableReset"
-          can-be-reset="canBeReset"
-          :on-click="resetQuery"
-        >
-          <div
-            v-if="canBeReset"
-            class="sm:mr-4 ml-auto"
-          >
-            <TableReset :on-click="resetQuery" :pre-style="preStyle" />
-          </div>
-        </slot>
-
-        <slot
           name="tableAddSearchRow"
           :has-search-inputs="queryBuilderProps.hasSearchInputs"
           :has-search-inputs-without-value="queryBuilderProps.hasSearchInputsWithoutValue"
@@ -87,12 +74,25 @@
         >
           <TableColumns
             v-if="queryBuilderProps.hasToggleableColumns"
-            class="mr-4 sm:mr-0"
+            class="mr-2 sm:mr-4"
             :columns="queryBuilderProps.columns"
             :has-hidden-columns="queryBuilderProps.hasHiddenColumns"
             :on-change="changeColumnStatus"
             :pre-style="preStyle"
           />
+        </slot>
+
+        <slot
+          name="tableReset"
+          can-be-reset="canBeReset"
+          :on-click="resetQuery"
+        >
+          <div
+            v-if="canBeReset"
+            class="mr-4 sm:mr-0"
+          >
+            <TableReset :on-click="resetQuery" :pre-style="preStyle" />
+          </div>
         </slot>
       </div>
 

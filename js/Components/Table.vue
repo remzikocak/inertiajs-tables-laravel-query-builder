@@ -8,27 +8,9 @@
       :class="{'opacity-75': isVisiting}"
     >
       <div class="flex flex-row flex-wrap sm:flex-nowrap justify-start px-4 sm:px-0">
-        <div class="order-2 sm:order-1 mr-2 sm:mr-4">
-          <slot
-            name="tableFilter"
-            :has-filters="queryBuilderProps.hasFilters"
-            :has-enabled-filters="queryBuilderProps.hasEnabledFilters"
-            :filters="queryBuilderProps.filters"
-            :on-filter-change="changeFilterValue"
-          >
-            <TableFilter
-              v-if="queryBuilderProps.hasFilters"
-              :has-enabled-filters="queryBuilderProps.hasEnabledFilters"
-              :filters="queryBuilderProps.filters"
-              :on-filter-change="changeFilterValue"
-              :pre-style="preStyle"
-            />
-          </slot>
-        </div>
-
         <div
           v-if="queryBuilderProps.globalSearch"
-          class="flex flex-row w-full sm:w-auto sm:grow order-1 sm:order-2 mb-2 sm:mb-0 sm:mr-4"
+          class="flex flex-row w-full sm:w-auto sm:grow mb-2 sm:mb-0 sm:mr-4"
         >
           <slot
             name="tableGlobalSearch"
@@ -48,6 +30,23 @@
           </slot>
         </div>
 
+        <div class="mr-2 sm:mr-4">
+          <slot
+            name="tableFilter"
+            :has-filters="queryBuilderProps.hasFilters"
+            :has-enabled-filters="queryBuilderProps.hasEnabledFilters"
+            :filters="queryBuilderProps.filters"
+            :on-filter-change="changeFilterValue"
+          >
+            <TableFilter
+              v-if="queryBuilderProps.hasFilters"
+              :has-enabled-filters="queryBuilderProps.hasEnabledFilters"
+              :filters="queryBuilderProps.filters"
+              :on-filter-change="changeFilterValue"
+              :pre-style="preStyle"
+            />
+          </slot>
+        </div>
 
         <slot
           name="tableReset"
@@ -56,7 +55,7 @@
         >
           <div
             v-if="canBeReset"
-            class="order-5 sm:order-3 sm:mr-4 ml-auto"
+            class="sm:mr-4 ml-auto"
           >
             <TableReset :on-click="resetQuery" :pre-style="preStyle" />
           </div>
@@ -71,7 +70,7 @@
         >
           <TableAddSearchRow
             v-if="queryBuilderProps.hasSearchInputs"
-            class="order-3 sm:order-4 mr-2 sm:mr-4"
+            class="mr-2 sm:mr-4"
             :search-inputs="queryBuilderProps.searchInputsWithoutGlobal"
             :has-search-inputs-without-value="queryBuilderProps.hasSearchInputsWithoutValue"
             :on-add="showSearchInput"
@@ -88,7 +87,7 @@
         >
           <TableColumns
             v-if="queryBuilderProps.hasToggleableColumns"
-            class="order-4 mr-4 sm:mr-0 sm:order-5"
+            class="mr-4 sm:mr-0"
             :columns="queryBuilderProps.columns"
             :has-hidden-columns="queryBuilderProps.hasHiddenColumns"
             :on-change="changeColumnStatus"

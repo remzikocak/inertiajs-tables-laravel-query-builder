@@ -478,7 +478,6 @@ function changeGlobalSearchValue(value) {
 
 function changeFilterValue(key, value) {
     const intKey = findDataKey("filters", key);
-
     queryBuilderData.value.filters[intKey].value = value;
     queryBuilderData.value.cursor = null;
     queryBuilderData.value.page = 1;

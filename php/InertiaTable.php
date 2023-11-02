@@ -7,6 +7,9 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Inertia\Response;
+use ProtoneMedia\LaravelQueryBuilderInertiaJs\Filters\Filter;
+use ProtoneMedia\LaravelQueryBuilderInertiaJs\Filters\Filterable;
+use ProtoneMedia\LaravelQueryBuilderInertiaJs\Filters\ToggleFilter;
 
 class InertiaTable
 {
@@ -147,7 +150,7 @@ class InertiaTable
 
             'filters'           => $this->transformFilters(),
             'hasFilters'        => $this->filters->isNotEmpty(),
-            'hasEnabledFilters' => $this->filters->filter->value->isNotEmpty(),
+            'hasEnabledFilters' => $this->filters->whereNotNull('value')->isNotEmpty(),
 
             'searchInputs'                => $searchInputs              = $this->transformSearchInputs(),
             'searchInputsWithoutGlobal'   => $searchInputsWithoutGlobal = $searchInputs->where('key', '!=', 'global'),
@@ -209,7 +212,7 @@ class InertiaTable
             return $filters;
         }
 
-        return $filters->map(function (Filter $filter) use ($queryFilters) {
+        return $filters->map(function (Filterable $filter) use ($queryFilters) {
             if (array_key_exists($filter->key, $queryFilters)) {
                 $filter->value = $queryFilters[$filter->key];
             }
@@ -319,7 +322,7 @@ class InertiaTable
      */
     public function selectFilter(string $key, array $options, string $label = null, string $defaultValue = null, bool $noFilterOption = true, string $noFilterOptionLabel = null): self
     {
-        $this->filters = $this->filters->reject(function (Filter $filter) use ($key) {
+        $this->filters = $this->filters->reject(function (Filterable $filter) use ($key) {
             return $filter->key === $key;
         })->push(new Filter(
             key: $key,
@@ -329,6 +332,27 @@ class InertiaTable
             noFilterOption: $noFilterOption,
             noFilterOptionLabel: $noFilterOptionLabel ?: '-',
             type: 'select'
+        ))->values();
+
+        return $this;
+    }
+
+    /**
+     * Add a toggle filter to the query builder.
+     *
+     * @param string $key
+     * @param string|null $label
+     * @param bool|null $defaultValue
+     * @return self
+     */
+    public function toggleFilter(string $key, string $label = null, bool $defaultValue = null): self
+    {
+        $this->filters = $this->filters->reject(function (Filterable $filter) use ($key) {
+            return $filter->key === $key;
+        })->push(new ToggleFilter(
+            key: $key,
+            label: $label ?: Str::headline($key),
+            value: $defaultValue,
         ))->values();
 
         return $this;

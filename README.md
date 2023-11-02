@@ -95,6 +95,30 @@ Inertia::render('Page/Index')->table(function (InertiaTable $table) {
 });
 ```
 
+#### Boolean Filters
+
+This way, you can present the user a toggle. Under the hood, this uses the same filtering feature of the Laravel Query Builder package.
+
+The `toggleFilter` method requires one argument: the key.
+
+```php
+Inertia::render('Page/Index')->table(function (InertiaTable $table) {
+    $table->toggleFilter('is_verified');
+});
+```
+
+You can specify a custom label for it and a default value.
+
+```php
+Inertia::render('Page/Index')->table(function (InertiaTable $table) {
+    $table->toggleFilter(
+        key: 'is_verified',
+        label: 'Is email verified',
+        defaultValue: true,
+    );
+});
+```
+
 #### Columns
 
 With the `column` method, you can specify which columns you want to be toggleable, sortable, and searchable. You must pass in at least a key or label for each column.
@@ -589,7 +613,6 @@ php artisan dusk
 
 ## v2.1 Roadmap
 
-* Boolean filters
 * Date filters
 * Date range filters
 * Switch to Vite for the demo app

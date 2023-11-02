@@ -49,35 +49,7 @@
               {{ option }}
             </option>
           </select>
-          <div v-if="filter.type === 'toggle'" class="w-full flex gap-2 justify-between items-center">
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" :checked="filter.value" class="sr-only peer" @change="onFilterChange(filter.key, $event.target.checked ? '1' : '0')">
-              <div
-                class="peer-focus:outline-none peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:transition-all"
-                :class="getTheme('toggle', filter.value === null ? `${preStyle}_disabled` : preStyle)"
-              />
-            </label>
-            <button
-              :class="getTheme('reset_toggle_button', preStyle)"
-              @click.prevent="onFilterChange(filter.key, null)"
-            >
-              <span class="sr-only">Remove search</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
+          <ToggleFilter v-if="filter.type === 'toggle'" :filter="filter" :on-filter-change="onFilterChange" />
         </div>
       </div>
     </div>
@@ -87,6 +59,7 @@
 <script setup>
 import ButtonWithDropdown from "./ButtonWithDropdown.vue";
 import {computed, inject} from "vue";
+import ToggleFilter from "./TableFilters/ToggleFilter.vue";
 
 const props = defineProps({
     hasEnabledFilters: {

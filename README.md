@@ -547,6 +547,16 @@ const themeVariables = {
                 default: 'block w-full shadow-sm text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500',
                 dootix: 'block w-full shadow-sm text-sm border-gray-300 rounded-md focus:ring-cyan-500 focus:border-blue-500',
             },
+            toggle: {
+                default: 'w-11 h-6 rounded-full after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 peer-checked:bg-indigo-500 bg-red-500',
+                dootix: 'w-11 h-6 rounded-full after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 peer-checked:bg-gradient-to-r peer-checked:from-cyan-500 peer-checked:to-blue-600 bg-red-500',
+                default_disabled: 'w-11 h-6 rounded-full after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 bg-gray-200',
+                dootix_disabled: 'w-11 h-6 rounded-full after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 bg-gray-200',
+            },
+            reset_toggle_button: {
+                default: 'rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
+                dootix: 'rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+            },
         },
         global_search: {
             input: {

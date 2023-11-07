@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Inertia\Response;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\Filters\Filter;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\Filters\Filterable;
+use ProtoneMedia\LaravelQueryBuilderInertiaJs\Filters\NumberRangeFilter;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\Filters\ToggleFilter;
 
 class InertiaTable
@@ -214,7 +215,14 @@ class InertiaTable
 
         return $filters->map(function (Filterable $filter) use ($queryFilters) {
             if (array_key_exists($filter->key, $queryFilters)) {
-                $filter->value = $queryFilters[$filter->key];
+                if ($filter instanceof NumberRangeFilter) {
+                    $filter->value = [
+                        $queryFilters[$filter->key][0] ?? $filter->min,
+                        $queryFilters[$filter->key][1] ?? $filter->max,
+                    ];
+                } else {
+                    $filter->value = $queryFilters[$filter->key];
+                }
             }
 
             return $filter;
@@ -352,6 +360,32 @@ class InertiaTable
         })->push(new ToggleFilter(
             key: $key,
             label: $label ?: Str::headline($key),
+            value: $defaultValue,
+        ))->values();
+
+        return $this;
+    }
+
+    /**
+     * Add a number range filter to the query builder.
+     *
+     * @param string $key
+     * @param string|null $label
+     * @param bool|null $defaultValue
+     * @return self
+     */
+    public function numberRangeFilter(string $key, float $max, float $min = 0, string $prefix = '', string $suffix = '', float $step = 1, string $label = null, bool $defaultValue = null): self
+    {
+        $this->filters = $this->filters->reject(function (Filterable $filter) use ($key) {
+            //return $filter->key === $key;
+        })->push(new NumberRangeFilter(
+            key: $key,
+            label: $label ?: Str::headline($key),
+            max: $max,
+            min: $min,
+            prefix: $prefix,
+            suffix: $suffix,
+            step: $step,
             value: $defaultValue,
         ))->values();
 

@@ -119,6 +119,40 @@ Inertia::render('Page/Index')->table(function (InertiaTable $table) {
 });
 ```
 
+#### Number range Filters
+
+This way, you can present the user a toggle. Under the hood, this uses the same filtering feature of the Laravel Query Builder package.
+
+The `numberRangeFilter` method requires two arguments: the key and the max value.
+
+```php
+Inertia::render('Page/Index')->table(function (InertiaTable $table) {
+    $table->numberRangeFilter('invoice_recall_count', 5);
+});
+```
+
+You can specify a some other params.
+```php
+Inertia::render('Page/Index')->table(function (InertiaTable $table) {
+    $table->toggleFilter(
+        key: 'invoice_recall_count',
+        max: 5,
+        min: 0,
+        prefix: '',
+        suffix: '',
+        step: 1,
+        label: 'Invoice recall count',
+        defaultValue: [1,4],
+    );
+});
+```
+
+You need to use a custom allowed filter for this filter.
+```php
+$users = QueryBuilder::for(/*...*/)
+            ->allowedFilters([NumberRangeFilter::getQueryBuilderFilter('invoice_recall_count')]);
+```
+
 #### Columns
 
 With the `column` method, you can specify which columns you want to be toggleable, sortable, and searchable. You must pass in at least a key or label for each column.

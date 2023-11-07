@@ -49,7 +49,24 @@
               {{ option }}
             </option>
           </select>
-          <ToggleFilter v-if="filter.type === 'toggle'" :filter="filter" :on-filter-change="onFilterChange" />
+          <ToggleFilter
+            v-if="filter.type === 'toggle'"
+            :filter="filter"
+            :on-filter-change="onFilterChange"
+            :pre-style="preStyle"
+          />
+          <div v-if="filter.type === 'number_range'" class="py-4 px-8" style="min-width: 250px;">
+            <NumberRangeFilter
+              :max="filter.max"
+              :min="filter.min"
+              :prefix="filter.prefix"
+              :suffix="filter.suffix"
+              :step="filter.step"
+              :pre-style="preStyle"
+              v-model="filter.value"
+              @update:model-value="updateNumberRangeFilter(filter)"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -58,8 +75,9 @@
 
 <script setup>
 import ButtonWithDropdown from "./ButtonWithDropdown.vue";
-import {computed, inject} from "vue";
+import {computed, inject, ref} from "vue";
 import ToggleFilter from "./TableFilters/ToggleFilter.vue";
+import NumberRangeFilter from "./TableFilters/NumberRangeFilter.vue";
 
 const props = defineProps({
     hasEnabledFilters: {
@@ -84,14 +102,22 @@ const props = defineProps({
     },
 });
 
+const timeout = ref(null)
+
 const activeFiltersCount = computed(() => {
   return props.filters.filter((f) => f.value === null).length
 })
 
+function updateNumberRangeFilter(filter) {
+  if (timeout.value) {
+    clearTimeout(timeout.value)
+  } timeout.value = setTimeout(() => {
+    props.onFilterChange(filter.key, filter.value)
+  }, 500)
+}
+
 // Theme
 const commonSelectClasses = "block w-full shadow-sm text-sm border-gray-300 rounded-md"
-const commonToggleClasses = "w-11 h-6 rounded-full after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5"
-const commonResetToggleButtonClasses = "rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
 
 const fallbackTheme = {
     inertia_table: {
@@ -99,16 +125,6 @@ const fallbackTheme = {
             select: {
                 default: `${commonSelectClasses} focus:ring-indigo-500 focus:border-indigo-500`,
                 dootix: `${commonSelectClasses} focus:ring-cyan-500 focus:border-blue-500`,
-            },
-            toggle: {
-              default: `${commonToggleClasses} peer-checked:bg-indigo-500 bg-red-500`,
-              dootix: `${commonToggleClasses} peer-checked:bg-gradient-to-r peer-checked:from-cyan-500 peer-checked:to-blue-600 bg-red-500`,
-              default_disabled: `${commonToggleClasses} bg-gray-200`,
-              dootix_disabled: `${commonToggleClasses} bg-gray-200`,
-            },
-            reset_toggle_button: {
-              default: `${commonResetToggleButtonClasses} focus:ring-indigo-500`,
-              dootix: `${commonResetToggleButtonClasses} focus:ring-cyan-500`,
             },
         },
     },

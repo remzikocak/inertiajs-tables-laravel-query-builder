@@ -182,14 +182,14 @@
 
           <slot
             name="pagination"
-            :on-click="visit"
+            :on-click="visitPageFromUrl"
             :has-data="hasData"
             :meta="resourceMeta"
             :per-page-options="queryBuilderProps.perPageOptions"
             :on-per-page-change="onPerPageChange"
           >
             <Pagination
-              :on-click="visit"
+              :on-click="visitPageFromUrl"
               :has-data="hasData"
               :meta="resourceMeta"
               :per-page-options="queryBuilderProps.perPageOptions"
@@ -302,7 +302,7 @@ const updates = ref(0);
 
 const queryBuilderProps = computed(() => {
     let data = usePage().props.queryBuilderProps
-        ? usePage().props.queryBuilderProps[props.name] || {}
+        ? { ...usePage().props.queryBuilderProps[props.name] } || {}
         : {};
 
     data._updates = updates.value;
@@ -511,8 +511,12 @@ function getFilterForQuery() {
     });
 
     forEach(queryBuilderData.value.filters, (filters) => {
-        if (filters.value !== null) {
-            filtersWithValue[filters.key] = filters.value;
+        let value = filters.value
+        if (value !== null) {
+            if (filters.type === 'number_range' && Number(Math.max(...filters.value)) === Number(filters.max) && Number(Math.min(...filters.value)) === Number(filters.min)) {
+                value = null
+            }
+            filtersWithValue[filters.key] = value;
         }
     });
 
@@ -574,6 +578,20 @@ function dataForNewQueryString() {
     }
 
     return queryData;
+}
+
+function visitPageFromUrl(url) {
+    if(!url) {
+        return null;
+    }
+
+    const pageName = usePage().props.queryBuilderProps[props.name].pageName ?? 'page';
+    const page = new URL(url)?.searchParams?.get(pageName);
+    if(page !== null) {
+        queryBuilderData.value.page = page;
+    } else {
+        visit(url);
+    }
 }
 
 function generateNewQueryString() {
@@ -642,11 +660,6 @@ function visit(url) {
                 isVisiting.value = false;
             },
             onSuccess() {
-                if("queryBuilderProps" in usePage().props){
-                    queryBuilderData.value.cursor = queryBuilderProps.value.cursor;
-                    queryBuilderData.value.page = queryBuilderProps.value.page;
-                }
-
                 if(props.preserveScroll === "table-top") {
                     const offset = -8;
                     const top = tableFieldset.value.getBoundingClientRect().top + window.pageYOffset + offset;
@@ -665,6 +678,7 @@ function  rowClicked(event, item, key) {
 }
 
 watch(queryBuilderData, () => {
+    console.log('tutu')
     visit(location.pathname + "?" +  generateNewQueryString());
 }, { deep: true });
 

@@ -111,8 +111,15 @@ const activeFiltersCount = computed(() => {
 function updateNumberRangeFilter(filter) {
   if (timeout.value) {
     clearTimeout(timeout.value)
-  } timeout.value = setTimeout(() => {
-    props.onFilterChange(filter.key, filter.value)
+  }
+  timeout.value = setTimeout(() => {
+    let value = filter.value
+    if (filter.value) {
+      if (Number(Math.max(...filter.value)) === Number(filter.max) && Number(Math.min(...filter.value)) === Number(filter.min)) {
+        value = null
+      }
+    }
+    props.onFilterChange(filter.key, value)
   }, 500)
 }
 

@@ -131,18 +131,19 @@ export default {
       moveMin: false,
       moveMax: false,
       hasOverlap: false,
+      internalValue: this.modelValue ? [...this.modelValue] : null
     }
   },
   watch: {
-    modelValue() {
+    internalValue() {
       this.detectIfOverlap()
     },
   },
   computed: {
     currentMinValue() {
       try {
-        if (Array.isArray(this.modelValue) && this.modelValue.length === 2) {
-          let val = Number(Math.min(...this.modelValue))
+        if (Array.isArray(this.internalValue) && this.internalValue.length === 2) {
+          let val = Number(Math.min(...this.internalValue))
           if (Number.isNaN(val)) {
             throw true
           } else {
@@ -158,8 +159,8 @@ export default {
     },
     currentMaxValue() {
       try {
-        if (Array.isArray(this.modelValue) && this.modelValue.length === 2) {
-          let val = Number(Math.max(...this.modelValue))
+        if (Array.isArray(this.internalValue) && this.internalValue.length === 2) {
+          let val = Number(Math.max(...this.internalValue))
           if (Number.isNaN(val)) {
             throw true
           } else {
@@ -235,10 +236,10 @@ export default {
       let roundedValue = Number(Math.round(value / this.step) * this.step).toFixed(2)
       if (roundedValue >= this.min && roundedValue <= this.max) {
         if (this.moveMin && roundedValue !== this.currentMinValue && roundedValue <= this.currentMaxValue) {
-          this.$emit('update:modelValue', [roundedValue, this.currentMaxValue])
+          this.internalValue = [roundedValue, this.currentMaxValue]
         }
         if (this.moveMax && roundedValue !== this.currentMaxValue && roundedValue >= this.currentMinValue) {
-          this.$emit('update:modelValue', [this.currentMinValue, roundedValue])
+          this.internalValue = [this.currentMinValue, roundedValue]
         }
       }
       this.detectIfOverlap()
@@ -247,6 +248,7 @@ export default {
       this.moveMin = this.moveMax = false
       window.removeEventListener('mousemove', this.handleMouseMove)
       window.removeEventListener('mouseup', this.handleMouseUp)
+      this.$emit('update:modelValue', [this.currentMinValue, this.currentMaxValue])
     },
     getTheme(type, name) {
       if (

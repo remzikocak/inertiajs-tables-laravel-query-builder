@@ -678,7 +678,6 @@ function  rowClicked(event, item, key) {
 }
 
 watch(queryBuilderData, () => {
-    console.log('tutu')
     visit(location.pathname + "?" +  generateNewQueryString());
 }, { deep: true });
 

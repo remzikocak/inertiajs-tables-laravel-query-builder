@@ -105,22 +105,31 @@ const props = defineProps({
 const timeout = ref(null)
 
 const activeFiltersCount = computed(() => {
-  return props.filters.filter((f) => f.value === null).length
+  return props.filters.filter((f) => !filterIsNull(f)).length
 })
 
+function filterIsNull(filter) {
+    if (filter.value === null) return true
+    switch (filter.type) {
+        case 'number_range':
+            return  Number(Math.max(...filter.value)) === Number(filter.max) && Number(Math.min(...filter.value)) === Number(filter.min)
+        case 'select':
+            return filter.value === ''
+        default:
+            return !filter.value
+    }
+}
+
 function updateNumberRangeFilter(filter) {
-  if (timeout.value) {
-    clearTimeout(timeout.value)
-  }
-  timeout.value = setTimeout(() => {
     let value = filter.value
     if (filter.value) {
       if (Number(Math.max(...filter.value)) === Number(filter.max) && Number(Math.min(...filter.value)) === Number(filter.min)) {
         value = null
+      } else if (Number(Math.min(...filter.value)) === 0 && Number(Math.max(...filter.value)) === 0) {
+        value = ['0', '0']
       }
     }
     props.onFilterChange(filter.key, value)
-  }, 500)
 }
 
 // Theme

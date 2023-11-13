@@ -455,7 +455,12 @@ setTranslations({
   per_page: "per page",
   previous: "Previous",
   results: "results",
-  to: "to"
+  to: "to",
+  search: "Search",
+  reset: "Reset",
+  grouped_reset: "Reset",
+  add_search_fields: "Add search field",
+  show_hide_columns: "Show / Hide columns",
 });
 ```
 

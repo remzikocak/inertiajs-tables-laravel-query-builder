@@ -36,6 +36,8 @@ import preventOverflow from "@popperjs/core/lib/modifiers/preventOverflow";
 import flip from "@popperjs/core/lib/modifiers/flip";
 import {ref, watch, onMounted, inject} from "vue";
 
+const emit = defineEmits(['closed'])
+
 const props = defineProps({
     placement: {
         type: String,
@@ -81,6 +83,9 @@ function hide() {
 
 watch(opened, () => {
     popper.value.update();
+  if (!opened.value) {
+    emit('closed')
+  }
 });
 
 const button = ref(null);

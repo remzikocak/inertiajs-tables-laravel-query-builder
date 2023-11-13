@@ -49,6 +49,7 @@
         </div>
 
         <slot
+          v-if="!withGroupedMenu"
           name="tableAddSearchRow"
           :has-search-inputs="queryBuilderProps.hasSearchInputs"
           :has-search-inputs-without-value="queryBuilderProps.hasSearchInputsWithoutValue"
@@ -66,6 +67,7 @@
         </slot>
 
         <slot
+          v-if="!withGroupedMenu"
           name="tableColumns"
           :has-columns="queryBuilderProps.hasToggleableColumns"
           :columns="queryBuilderProps.columns"
@@ -74,7 +76,7 @@
         >
           <TableColumns
             v-if="queryBuilderProps.hasToggleableColumns"
-            class="mr-2 sm:mr-4"
+            :class="{ 'mr-2 sm:mr-4' : canBeReset }"
             :columns="queryBuilderProps.columns"
             :has-hidden-columns="queryBuilderProps.hasHiddenColumns"
             :on-change="changeColumnStatus"
@@ -83,8 +85,20 @@
         </slot>
 
         <slot
+          v-if="withGroupedMenu"
+          name="groupedAction"
+          :actions="defaultActions"
+        >
+          <GroupedActions
+            :pre-style="preStyle"
+            :actions="defaultActions"
+          />
+        </slot>
+
+        <slot
+          v-if="!withGroupedMenu"
           name="tableReset"
-          can-be-reset="canBeReset"
+          :can-be-reset="canBeReset"
           :on-click="resetQuery"
         >
           <div
@@ -223,6 +237,7 @@ import isEqual from "lodash-es/isEqual";
 import map from "lodash-es/map";
 import pickBy from "lodash-es/pickBy";
 import {router, usePage} from "@inertiajs/vue3";
+import GroupedActions from "./GroupedActions.vue";
 
 const emit = defineEmits(['rowClicked'])
 
@@ -286,6 +301,12 @@ const props = defineProps({
         default: () => {
             return {};
         },
+        required: false,
+    },
+
+    withGroupedMenu: {
+        type: Boolean,
+        default: false,
         required: false,
     },
 
@@ -389,7 +410,22 @@ const hasData = computed(() => {
     return false;
 });
 
-//
+const defaultActions = ref({
+    reset: {
+        onClick: resetQuery,
+    },
+    toggleColumns: {
+        show: queryBuilderProps.value.hasToggleableColumns,
+        columns: queryBuilderProps.value.columns,
+        onChange: changeColumnStatus,
+    },
+    searchFields: {
+      show: queryBuilderProps.value.hasSearchInputs,
+      searchInputs: queryBuilderProps.value.searchInputsWithoutGlobal,
+      hasSearchInputsWithoutValue: queryBuilderProps.value.hasSearchInputsWithoutValue,
+      onClick: showSearchInput,
+    },
+})
 
 function disableSearchInput(key) {
     forcedVisibleSearchInputs.value = forcedVisibleSearchInputs.value.filter((search) => search != key);

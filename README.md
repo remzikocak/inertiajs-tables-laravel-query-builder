@@ -476,6 +476,7 @@ The `Table.vue` has several slots that you can use to inject your own implementa
 | head              | The location of the table header.                                                      |
 | body              | The location of the table body.                                                        |
 | pagination        | The location of the paginator.                                                         |
+| with-grouped-menu | Use the grouped menu instead of multiple buttons                                       |
 | pre-style         | The style of the table                                                                 |
 
 Each slot is provided with props to interact with the parent `Table` component.

@@ -2,7 +2,7 @@
   <ButtonWithDropdown
     placement="bottom-end"
     dusk="columns-dropdown"
-    :pre-style="preStyle"
+    :color="color"
   >
     <template #button>
       <svg
@@ -92,9 +92,9 @@ const props = defineProps({
         required: true,
     },
 
-    preStyle: {
+    color: {
         type: String,
-        default: 'default',
+        default: 'primary',
         required: false,
     },
 });

@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <input
-      :class="getTheme('input', preStyle)"
+      :class="getTheme('input')"
       :placeholder="label"
       :value="value"
       type="text"
@@ -28,55 +28,56 @@
 
 <script setup>
 import {inject} from "vue";
+import {twMerge} from "tailwind-merge";
+import {get_theme_part} from "../helpers.js";
 
-defineProps({
-    label: {
-        type: String,
-        default: "Search...",
-        required: false,
-    },
+const props = defineProps({
+  label: {
+    type: String,
+    default: "Search...",
+    required: false,
+  },
 
-    value: {
-        type: String,
-        default: "",
-        required: false,
-    },
+  value: {
+    type: String,
+    default: "",
+    required: false,
+  },
 
-    onChange: {
-        type: Function,
-        required: true,
-    },
+  onChange: {
+    type: Function,
+    required: true,
+  },
 
-    preStyle: {
-      type: String,
-      default: 'default',
-      required: false,
-    }
+  color: {
+    type: String,
+    default: 'primary',
+    required: false,
+  },
+
+  ui: {
+    required: false,
+    type: Object,
+    default: {} ,
+  },
 });
 
 // Theme
 const fallbackTheme = {
-  inertia_table: {
-    global_search: {
-      input: {
-        default: "block w-full pl-9 text-sm rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300",
-        dootix: "block w-full pl-9 text-sm rounded-md shadow-sm focus:ring-cyan-500 focus:border-blue-500 border-gray-300",
-      },
+  input: {
+    base: "block w-full pl-9 text-sm rounded-md shadow-sm",
+    color: {
+      primary: "focus:ring-indigo-500 focus:border-indigo-500 border-gray-300",
+      dootix: "focus:ring-cyan-500 focus:border-blue-500 border-gray-300",
     },
   },
 }
 const themeVariables = inject('themeVariables');
-const getTheme = (type, name) => {
-  if (
-    "inertia_table" in themeVariables &&
-    "global_search" in themeVariables.inertia_table &&
-    type in themeVariables.inertia_table.global_search &&
-    name in themeVariables.inertia_table.global_search[type]
-  ) {
-    return themeVariables.inertia_table.global_search[type][name];
-  } else {
-    return fallbackTheme.inertia_table.global_search[type][name];
-  }
+const getTheme = (item) => {
+  return twMerge(
+    get_theme_part([item, 'base'], fallbackTheme, themeVariables?.inertia_table?.global_search, props.ui),
+    get_theme_part([item, 'color', props.color], fallbackTheme, themeVariables?.inertia_table?.global_search, props.ui),
+  )
 }
 </script>
 

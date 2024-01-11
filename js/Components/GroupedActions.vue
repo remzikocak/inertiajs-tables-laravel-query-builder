@@ -3,7 +3,7 @@
     ref="dropdown"
     dusk="grouped-actions-dropdown"
     class="w-auto"
-    :pre-style="preStyle"
+    :color="color"
     @closed="menuClosed"
   >
     <template #button>
@@ -201,9 +201,9 @@ const props = defineProps({
     required: true,
   },
 
-  preStyle: {
+  color: {
     type: String,
-    default: 'default',
+    default: 'primary',
     required: false,
   },
 });

@@ -4,11 +4,11 @@
       <input type="checkbox" :checked="filter.value" class="sr-only peer" @change="onFilterChange(filter.key, $event.target.checked ? '1' : '0')">
       <div
         class="peer-focus:outline-none peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:transition-all"
-        :class="getTheme('toggle', filter.value === null ? `${preStyle}_disabled` : preStyle)"
+        :class="getTheme('toggle')"
       />
     </label>
     <button
-      :class="getTheme('reset_toggle_button', preStyle)"
+      :class="getTheme('reset_button')"
       @click.prevent="onFilterChange(filter.key, null)"
     >
       <span class="sr-only">Remove search</span>
@@ -32,6 +32,8 @@
 
 <script setup>
 import {inject} from "vue";
+import {twMerge} from "tailwind-merge";
+import {get_theme_part} from "../../helpers.js";
 
 const props = defineProps({
   filter: {
@@ -44,44 +46,46 @@ const props = defineProps({
     required: true,
   },
 
-  preStyle: {
+  color: {
     type: String,
-    default: 'default',
+    default: 'primary',
     required: false,
+  },
+
+  ui: {
+    required: false,
+    type: Object,
+    default: {} ,
   },
 });
 
 // Theme
-const commonToggleClasses = "w-11 h-6 rounded-full after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5"
-const commonResetToggleButtonClasses = "rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
-
 const fallbackTheme = {
-  inertia_table: {
-    table_filter: {
-      toggle: {
-        default: `${commonToggleClasses} peer-checked:bg-indigo-500 bg-red-500`,
-        dootix: `${commonToggleClasses} peer-checked:bg-gradient-to-r peer-checked:from-cyan-500 peer-checked:to-blue-600 bg-red-500`,
-        default_disabled: `${commonToggleClasses} bg-gray-200`,
-        dootix_disabled: `${commonToggleClasses} bg-gray-200`,
-      },
-      reset_toggle_button: {
-        default: `${commonResetToggleButtonClasses} focus:ring-indigo-500`,
-        dootix: `${commonResetToggleButtonClasses} focus:ring-cyan-500`,
-      },
+  toggle: {
+    base: "w-11 h-6 rounded-full after:border after:rounded-full after:h-5 after:w-5",
+    color: {
+      primary: "after:bg-white after:border-white peer-checked:bg-indigo-500 bg-red-500",
+      dootix: "after:bg-white after:border-white peer-checked:bg-gradient-to-r peer-checked:from-cyan-500 peer-checked:to-blue-600 bg-red-500",
+      disabled: "after:bg-white after:border-white bg-gray-200",
+    },
+  },
+  reset_button: {
+    base: "rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2",
+    color: {
+      primary: "text-gray-400 hover:text-gray-500 focus:ring-indigo-500",
+      dootix: "text-gray-400 hover:text-gray-500 focus:ring-cyan-500",
     },
   },
 }
 const themeVariables = inject('themeVariables');
-const getTheme = (type, name) => {
-  if (
-    "inertia_table" in themeVariables &&
-    "table_filter" in themeVariables.inertia_table &&
-    type in themeVariables.inertia_table.table_filter &&
-    name in themeVariables.inertia_table.table_filter[type]
-  ) {
-    return themeVariables.inertia_table.table_filter[type][name];
-  } else {
-    return fallbackTheme.inertia_table.table_filter[type][name];
+const getTheme = (item) => {
+  let color = props.color
+  if (item === 'toggle' && props.filter.value === null) {
+    color = 'disabled'
   }
+  return twMerge(
+    get_theme_part([item, 'base'], fallbackTheme, themeVariables?.inertia_table?.table_filter?.toggle_filter, props.ui),
+    get_theme_part([item, 'color', color], fallbackTheme, themeVariables?.inertia_table?.table_filter?.toggle_filter, props.ui),
+  )
 }
 </script>

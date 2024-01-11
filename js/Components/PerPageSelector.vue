@@ -3,7 +3,7 @@
     name="per_page"
     :dusk="dusk"
     :value="value"
-    :class="getTheme('select', preStyle)"
+    :class="getTheme('select')"
     @change="onChange($event.target.value)"
   >
     <option
@@ -20,6 +20,8 @@
 import {computed, inject} from "vue";
 import uniq from "lodash-es/uniq";
 import { getTranslations } from "../translations.js";
+import {twMerge} from "tailwind-merge";
+import {get_theme_part} from "../helpers.js";
 
 const translations = getTranslations();
 
@@ -49,10 +51,16 @@ const props = defineProps({
         required: true,
     },
 
-    preStyle: {
+    color: {
         type: String,
-        default: 'default',
+        default: 'primary',
         required: false,
+    },
+
+    ui: {
+        required: false,
+        type: Object,
+        default: {} ,
     },
 });
 
@@ -65,29 +73,21 @@ const perPageOptions = computed(() => {
 });
 
 // Theme
-const commonClasses = "block min-w-max shadow-sm text-sm border-gray-300 rounded-md"
 const fallbackTheme = {
-    inertia_table: {
-        per_page_selector: {
-            select: {
-                default: `${commonClasses} focus:ring-indigo-500 focus:border-indigo-500`,
-                dootix: `${commonClasses} focus:ring-cyan-500 focus:border-blue-500`,
-            },
+    select: {
+        base: "block min-w-max shadow-sm text-sm rounded-md",
+        color: {
+            primary: "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500",
+            dootix: "border-gray-300 focus:ring-cyan-500 focus:border-blue-500",
         },
     },
 }
 const themeVariables = inject('themeVariables');
-const getTheme = (type, name) => {
-    if (
-        "inertia_table" in themeVariables &&
-        "per_page_selector" in themeVariables.inertia_table &&
-        type in themeVariables.inertia_table.per_page_selector &&
-        name in themeVariables.inertia_table.per_page_selector[type]
-    ) {
-        return themeVariables.inertia_table.per_page_selector[type][name];
-    } else {
-        return fallbackTheme.inertia_table.per_page_selector[type][name];
-    }
+const getTheme = (item) => {
+    return twMerge(
+        get_theme_part([item, 'base'], fallbackTheme, themeVariables?.inertia_table?.per_page_selector, props.ui),
+        get_theme_part([item, 'color', props.color], fallbackTheme, themeVariables?.inertia_table?.per_page_selector, props.ui),
+    )
 }
 </script>
 

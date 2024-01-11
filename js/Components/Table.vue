@@ -25,7 +25,7 @@
               :label="queryBuilderProps.globalSearch.label"
               :value="queryBuilderProps.globalSearch.value"
               :on-change="changeGlobalSearchValue"
-              :pre-style="preStyle"
+              :color="color"
             />
           </slot>
         </div>
@@ -43,7 +43,7 @@
               :has-enabled-filters="queryBuilderProps.hasEnabledFilters"
               :filters="queryBuilderProps.filters"
               :on-filter-change="changeFilterValue"
-              :pre-style="preStyle"
+              :color="color"
             />
           </slot>
         </div>
@@ -62,7 +62,7 @@
             :search-inputs="queryBuilderProps.searchInputsWithoutGlobal"
             :has-search-inputs-without-value="queryBuilderProps.hasSearchInputsWithoutValue"
             :on-add="showSearchInput"
-            :pre-style="preStyle"
+            :color="color"
           />
         </slot>
 
@@ -80,7 +80,7 @@
             :columns="queryBuilderProps.columns"
             :has-hidden-columns="queryBuilderProps.hasHiddenColumns"
             :on-change="changeColumnStatus"
-            :pre-style="preStyle"
+            :color="color"
           />
         </slot>
 
@@ -90,7 +90,7 @@
           :actions="defaultActions"
         >
           <GroupedActions
-            :pre-style="preStyle"
+            :color="color"
             :actions="defaultActions"
           />
         </slot>
@@ -105,7 +105,7 @@
             v-if="canBeReset"
             class="mr-4 sm:mr-0"
           >
-            <TableReset :on-click="resetQuery" :pre-style="preStyle" />
+            <TableReset :on-click="resetQuery" :color="color" />
           </div>
         </slot>
       </div>
@@ -123,7 +123,7 @@
           :forced-visible-search-inputs="forcedVisibleSearchInputs"
           :on-change="changeSearchInputValue"
           :on-remove="disableSearchInput"
-          :pre-style="preStyle"
+          :color="color"
         />
       </slot>
 
@@ -208,7 +208,7 @@
               :meta="resourceMeta"
               :per-page-options="queryBuilderProps.perPageOptions"
               :on-per-page-change="onPerPageChange"
-              :pre-style="preStyle"
+              :color="color"
             />
           </slot>
         </TableWrapper>
@@ -310,9 +310,9 @@ const props = defineProps({
         required: false,
     },
 
-    preStyle: {
+    color: {
         type: String,
-        default: 'default',
+        default: 'primary',
         required: false,
     },
 });

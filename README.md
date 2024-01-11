@@ -477,7 +477,7 @@ The `Table.vue` has several slots that you can use to inject your own implementa
 | body              | The location of the table body.                                                        |
 | pagination        | The location of the paginator.                                                         |
 | with-grouped-menu | Use the grouped menu instead of multiple buttons                                       |
-| pre-style         | The style of the table                                                                 |
+| color             | The style of the table                                                                 |
 
 Each slot is provided with props to interact with the parent `Table` component.
 
@@ -504,7 +504,7 @@ const themeVariables = {
     inertia_table: {
         per_page_selector: {
             select: {
-                default: 'your classes',
+                primary: 'your classes',
             },
         },
     },
@@ -533,21 +533,27 @@ const themeVariables = {
     inertia_table: {
         per_page_selector: {
             select: {
-                default: 'block min-w-max shadow-sm text-sm border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500',
+                base: "block min-w-max shadow-sm text-sm rounded-md",
+                color: {
+                    primary: "border-gray-300 focus:ring-yellow-500 focus:border-yellow-500",
+                },
             },
         },
     },
 }
 ```
 
-Or you can create a new style and using the `pre-style` prop on the `Table.vue`
+Or you can create a new style and using the `color` prop on the `Table.vue`
 
 ```javascript
 const themeVariables = {
     inertia_table: {
         per_page_selector: {
             select: {
-                red_style: 'block min-w-max shadow-sm text-sm border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500',
+                base: "block min-w-max shadow-sm text-sm rounded-md",
+                color: {
+                    red_style: 'border-gray-300 focus:ring-red-500 focus:border-red-500',
+                },
             },
         },
     },
@@ -556,7 +562,7 @@ const themeVariables = {
 
 ```vue
 <template>
-  <Table pre-style="red_style" />
+  <Table color="red_style" />
 </template>
 ```
 
@@ -567,52 +573,124 @@ const themeVariables = {
     inertia_table: {
         button_with_dropdown: {
             button: {
-                default: 'w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
-                dootix: 'w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+                base: "w-full border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2",
+                color: {
+                    primary: "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 focus:ring-indigo-500",
+                    dootix: "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 focus:ring-cyan-500",
+                },
             },
         },
         per_page_selector: {
             select: {
-                default: 'block min-w-max shadow-sm text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500',
-                dootix: 'block min-w-max shadow-sm text-sm border-gray-300 rounded-md focus:ring-cyan-500 focus:border-blue-500',
+                base: "block min-w-max shadow-sm text-sm rounded-md",
+                color: {
+                    primary: "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500",
+                    dootix: "border-gray-300 focus:ring-cyan-500 focus:border-blue-500",
+                },
             },
         },
         table_filter: {
-            select: {
-                default: 'block w-full shadow-sm text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500',
-                dootix: 'block w-full shadow-sm text-sm border-gray-300 rounded-md focus:ring-cyan-500 focus:border-blue-500',
+            select_filter: {
+                select: {
+                    base: "block w-full shadow-sm text-sm rounded-md",
+                    color: {
+                        primary: "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500",
+                        dootix: "border-gray-300 focus:ring-cyan-500 focus:border-blue-500",
+                    },
+                },
             },
-            toggle: {
-                default: 'w-11 h-6 rounded-full after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 peer-checked:bg-indigo-500 bg-red-500',
-                dootix: 'w-11 h-6 rounded-full after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 peer-checked:bg-gradient-to-r peer-checked:from-cyan-500 peer-checked:to-blue-600 bg-red-500',
-                default_disabled: 'w-11 h-6 rounded-full after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 bg-gray-200',
-                dootix_disabled: 'w-11 h-6 rounded-full after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 bg-gray-200',
+            togle_filter: {
+                toggle: {
+                    base: "w-11 h-6 rounded-full after:border after:rounded-full after:h-5 after:w-5",
+                    color: {
+                        primary: "after:bg-white after:border-white peer-checked:bg-indigo-500 bg-red-500",
+                        dootix: "after:bg-white after:border-white peer-checked:bg-gradient-to-r peer-checked:from-cyan-500 peer-checked:to-blue-600 bg-red-500",
+                        disabled: "after:bg-white after:border-white bg-gray-200",
+                    }
+                },
+                reset_button: {
+                    base: "rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2",
+                    color: {
+                        primary: "text-gray-400 hover:text-gray-500 focus:ring-indigo-500",
+                        dootix: "text-gray-400 hover:text-gray-500 focus:ring-cyan-500",
+                    },
+                },
             },
-            reset_toggle_button: {
-                default: 'rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
-                dootix: 'rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+            number_range_filter: {
+                main_bar: {
+                    base: "h-2 rounded-full",
+                    color: {
+                        primary: "bg-gray-200",
+                        dootix: "bg-gray-200",
+                    },
+                },
+                selected_bar: {
+                    base: "h-2 rounded-full",
+                    color: {
+                        primary: "bg-indigo-600",
+                        dootix: "bg-gradient-to-r from-cyan-500 to-blue-600",
+                    },
+                },
+                button: {
+                    base: "h-4 w-4 rounded-full shadow border",
+                    color: {
+                        primary: "bg-white border-gray-300",
+                        dootix: "bg-white border-gray-300",
+                    },
+                },
+                popover: {
+                    base: "truncate text-xs rounded py-1 px-4",
+                    color: {
+                        primary: "bg-gray-600 text-white",
+                        dootix: "bg-gray-600 text-white",
+                    },
+                },
+                popover_arrow: {
+                    color: {
+                        primary: "text-gray-600",
+                        dootix: "text-gray-600",
+                    },
+                },
+                text: {
+                    color: {
+                        primary: "text-gray-700",
+                        dootix: "text-gray-700",
+                    },
+                },
             },
         },
         global_search: {
             input: {
-                default: "block w-full pl-9 text-sm rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300",
-                dootix: "block w-full pl-9 text-sm rounded-md shadow-sm focus:ring-cyan-500 focus:border-blue-500 border-gray-300",
+                base: "block w-full pl-9 text-sm rounded-md shadow-sm",
+                color: {
+                    primary: "focus:ring-indigo-500 focus:border-indigo-500 border-gray-300",
+                    dootix: "focus:ring-cyan-500 focus:border-blue-500 border-gray-300",
+                },
             },
         },
         reset_button: {
             button: {
-                default: 'w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 border-gray-300 focus:ring-indigo-500',
-                dootix: 'w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 border-gray-300 focus:ring-cyan-500',
+                base: "w-full border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2",
+                color: {
+                    primary: "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 focus:ring-indigo-500",
+                    dootix: "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 focus:ring-cyan-500",
+                },
             },
         },
         table_search_rows: {
             input: {
-                default: 'flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md text-sm border-gray-300 focus:ring-indigo-500 focus:border-indigo-500',
-                dootix: 'flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md text-sm border-gray-300 focus:ring-cyan-500 focus:border-blue-500',
+                base: "flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md text-sm",
+                color: {
+                    primary: "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500",
+                    dootix: "border-gray-300 focus:ring-cyan-500 focus:border-blue-500",
+                },
             },
             remove_button: {
-                default: 'rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
-                dootix: 'rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+                base: "rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2",
+                color: {
+                    primary: "text-gray-400 hover:text-gray-500 focus:ring-indigo-500",
+                    dootix: "text-gray-400 hover:text-gray-500 focus:ring-cyan-500",
+                },
             },
         },
     },

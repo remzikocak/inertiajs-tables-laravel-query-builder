@@ -1,44 +1,44 @@
 <template>
   <div ref="range" class="flex w-full my-4 items-center justify-center" unselectable="on" onselectstart="return false;">
     <div class="py-1 relative min-w-full">
-      <div :class="getTheme('main_bar', preStyle)">
-        <div class="absolute" :class="getTheme('selected_bar', preStyle)" :style="`width: ${rangeWidth}% !important; left: ${currentMinValueInPercent}% !important;`"></div>
-        <div @mousedown="handleMouseDown($event, true)" :class="getTheme('button', preStyle)" class="absolute flex items-center justify-center -ml-2 top-0 cursor-pointer" :style="`left: ${currentMinValueInPercent}%;`">
+      <div :class="getTheme('main_bar')">
+        <div class="absolute" :class="getTheme('selected_bar')" :style="`width: ${rangeWidth}% !important; left: ${currentMinValueInPercent}% !important;`"></div>
+        <div @mousedown="handleMouseDown($event, true)" :class="getTheme('button')" class="absolute flex items-center justify-center -ml-2 top-0 cursor-pointer" :style="`left: ${currentMinValueInPercent}%;`">
           <div class="z-40">
             <div ref="popover_min" class="relative shadow-md">
-              <div :class="getTheme('popover', preStyle)" :style="getMarginTop(hasOverlap && displayFirstDown)">
+              <div :class="getTheme('popover')" :style="getMarginTop(hasOverlap && displayFirstDown)">
                 <span v-if="prefix">{{ prefix }}</span>
                 {{ currentMinValue ?? 0 }}
                 <span v-if="suffix">{{ suffix }}</span>
               </div>
-              <svg class="absolute w-full h-2 left-0" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve" :class="[hasOverlap && displayFirstDown ? 'bottom-6 rotate-180' : 'top-100', getTheme('popover_arrow', preStyle)]">
+              <svg class="absolute w-full h-2 left-0" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve" :class="[hasOverlap && displayFirstDown ? 'bottom-6 rotate-180' : 'top-100', getTheme('popover_arrow')]">
                                 <polygon class="fill-current" points="0,0 127.5,127.5 255,0"></polygon>
                             </svg>
             </div>
           </div>
         </div>
-        <div @mousedown="handleMouseDown($event, false)" :class="getTheme('button', preStyle)" class="absolute flex items-center justify-center -ml-2 top-0 cursor-pointer" :style="`left: ${currentMaxValueInPercent}%;`">
+        <div @mousedown="handleMouseDown($event, false)" :class="getTheme('button')" class="absolute flex items-center justify-center -ml-2 top-0 cursor-pointer" :style="`left: ${currentMaxValueInPercent}%;`">
           <div class="z-40">
             <div ref="popover_max" class="relative shadow-md">
-              <div :class="getTheme('popover', preStyle)" :style="getMarginTop(hasOverlap && !displayFirstDown)">
+              <div :class="getTheme('popover')" :style="getMarginTop(hasOverlap && !displayFirstDown)">
                 <span v-if="prefix">{{ prefix }}</span>
                 {{ currentMaxValue ?? 0 }}
                 <span v-if="suffix">{{ suffix }}</span>
               </div>
               <div draggable="true">
-                <svg class="absolute w-full h-2 left-0 top-100" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve" :class="[hasOverlap && !displayFirstDown ? 'bottom-6 rotate-180' : 'top-100', getTheme('popover_arrow', preStyle)]">
+                <svg class="absolute w-full h-2 left-0 top-100" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve" :class="[hasOverlap && !displayFirstDown ? 'bottom-6 rotate-180' : 'top-100', getTheme('popover_arrow')]">
                                     <polygon class="fill-current" points="0,0 127.5,127.5 255,0"></polygon>
                                 </svg>
               </div>
             </div>
           </div>
         </div>
-        <div class="absolute -ml-1 bottom-0 left-0 -mb-6" :class="getTheme('text', preStyle)">
+        <div class="absolute -ml-1 bottom-0 left-0 -mb-6" :class="getTheme('text')">
           <span v-if="prefix">{{ prefix }}</span>
           {{ min ?? 0 }}
           <span v-if="suffix">{{ suffix }}</span>
         </div>
-        <div class="absolute -mr-1 bottom-0 right-0 -mb-6" :class="getTheme('text', preStyle)">
+        <div class="absolute -mr-1 bottom-0 right-0 -mb-6" :class="getTheme('text')">
           <span v-if="prefix">{{ prefix }}</span>
           {{ max ?? 0 }}
           <span v-if="suffix">{{ suffix }}</span>
@@ -49,44 +49,9 @@
 </template>
 
 <script>
-const commonMainBar = 'h-2 bg-gray-200 rounded-full'
-const commonSelectedBar = 'h-2 rounded-full'
-const commonButton = 'h-4 w-4 rounded-full bg-white shadow border border-gray-300'
-const commonPopover = 'bg-gray-600 text-white truncate text-xs rounded py-1 px-4'
-const commonPopoverArrow = 'text-gray-600'
-const commonText = 'text-gray-700'
-const fallbackTheme = {
-  inertia_table: {
-    table_filter: {
-      number_range_filter: {
-        main_bar: {
-          default: commonMainBar,
-          dootix: commonMainBar,
-        },
-        selected_bar: {
-          default: `${commonSelectedBar} bg-indigo-600`,
-          dootix: `${commonSelectedBar} bg-gradient-to-r from-cyan-500 to-blue-600`,
-        },
-        button: {
-          default: commonButton,
-          dootix: commonButton,
-        },
-        popover: {
-          default: commonPopover,
-          dootix: commonPopover,
-        },
-        popover_arrow: {
-          default: commonPopoverArrow,
-          dootix: commonPopoverArrow,
-        },
-        text: {
-          default: commonText,
-          dootix: commonText,
-        },
-      },
-    },
-  },
-}
+import {twMerge} from "tailwind-merge";
+import {get_theme_part} from "../../helpers.js";
+
 export default {
   name: "SimpleMultiRange",
   inject: ['themeVariables'],
@@ -119,10 +84,15 @@ export default {
       type: Number,
       default: 1,
     },
-    preStyle: {
+    color: {
       required: false,
       type: String,
-      default: 'default',
+      default: 'primary',
+    },
+    ui: {
+      required: false,
+      type: Object,
+      default: {} ,
     },
   },
   data() {
@@ -131,7 +101,8 @@ export default {
       moveMin: false,
       moveMax: false,
       hasOverlap: false,
-      internalValue: this.modelValue ? [...this.modelValue] : null
+      internalValue: this.modelValue ? [...this.modelValue] : null,
+      fallbackTheme: null,
     }
   },
   watch: {
@@ -189,7 +160,7 @@ export default {
   },
   methods: {
     getMarginTop(isDown) {
-      const buttonTheme = this.getTheme('button', this.preStyle)
+      const buttonTheme = this.getTheme('button')
       const regex = /h-(\d+)/;
       const match = buttonTheme.match(regex);
       const defaultNumber = 4
@@ -250,26 +221,58 @@ export default {
       window.removeEventListener('mouseup', this.handleMouseUp)
       this.$emit('update:modelValue', [this.currentMinValue, this.currentMaxValue])
     },
-    getTheme(type, name) {
-      if (
-        "inertia_table" in this.themeVariables &&
-        "table_filter" in this.themeVariables.inertia_table &&
-        "number_range_filter" in this.themeVariables.inertia_table.table_filter &&
-        type in this.themeVariables.inertia_table.table_filter.number_range_filter &&
-        name in this.themeVariables.inertia_table.table_filter.number_range_filter[type]
-      ) {
-        return this.themeVariables.inertia_table.table_filter.number_range_filter[type][name]
-      } else {
-        return this.fallbackTheme.inertia_table.table_filter.number_range_filter[type][name]
-      }
+    getTheme(item) {
+      return twMerge(
+        get_theme_part([item, 'base'], this.fallbackTheme, this.themeVariables?.inertia_table?.table_filter?.number_range_filter, this.ui),
+        get_theme_part([item, 'color', this.color], this.fallbackTheme, this.themeVariables?.inertia_table?.table_filter?.number_range_filter, this.ui),
+      )
     },
   },
   mounted() {
     this.detectIfOverlap()
   },
-  setup() {
-    return {
-      fallbackTheme,
+  beforeMount() {
+    this.fallbackTheme = {
+      main_bar: {
+        base: "h-2 rounded-full",
+        color: {
+          primary: "bg-gray-200",
+          dootix: "bg-gray-200",
+        },
+      },
+      selected_bar: {
+        base: "h-2 rounded-full",
+        color: {
+          primary: "bg-indigo-600",
+          dootix: "bg-gradient-to-r from-cyan-500 to-blue-600",
+        },
+      },
+      button: {
+        base: "h-4 w-4 rounded-full shadow border",
+        color: {
+          primary: "bg-white border-gray-300",
+          dootix: "bg-white border-gray-300",
+        },
+      },
+      popover: {
+        base: "truncate text-xs rounded py-1 px-4",
+        color: {
+          primary: "bg-gray-600 text-white",
+          dootix: "bg-gray-600 text-white",
+        },
+      },
+      popover_arrow: {
+        color: {
+          primary: "text-gray-600",
+          dootix: "text-gray-600",
+        },
+      },
+      text: {
+        color: {
+          primary: "text-gray-700",
+          dootix: "text-gray-700",
+        },
+      },
     }
   },
 }

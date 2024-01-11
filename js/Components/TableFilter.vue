@@ -2,7 +2,7 @@
   <ButtonWithDropdown
     placement="bottom-end"
     dusk="filters-dropdown"
-    :pre-style="preStyle"
+    :color="color"
   >
     <template #button>
       <svg
@@ -38,7 +38,7 @@
             v-if="filter.type === 'select'"
             :name="filter.key"
             :value="filter.value"
-            :class="getTheme('select', preStyle)"
+            :class="getTheme('select', color)"
             @change="onFilterChange(filter.key, $event.target.value)"
           >
             <option
@@ -53,7 +53,7 @@
             v-if="filter.type === 'toggle'"
             :filter="filter"
             :on-filter-change="onFilterChange"
-            :pre-style="preStyle"
+            :color="color"
           />
           <div v-if="filter.type === 'number_range'" class="py-4 px-8" style="min-width: 250px;">
             <NumberRangeFilter
@@ -62,7 +62,7 @@
               :prefix="filter.prefix"
               :suffix="filter.suffix"
               :step="filter.step"
-              :pre-style="preStyle"
+              :color="color"
               v-model="filter.value"
               @update:model-value="updateNumberRangeFilter(filter)"
             />
@@ -78,6 +78,8 @@ import ButtonWithDropdown from "./ButtonWithDropdown.vue";
 import {computed, inject, ref} from "vue";
 import ToggleFilter from "./TableFilters/ToggleFilter.vue";
 import NumberRangeFilter from "./TableFilters/NumberRangeFilter.vue";
+import {twMerge} from "tailwind-merge";
+import {get_theme_part} from "../helpers.js";
 
 const props = defineProps({
     hasEnabledFilters: {
@@ -95,10 +97,16 @@ const props = defineProps({
         required: true,
     },
 
-    preStyle: {
+    color: {
         type: String,
-        default: 'default',
+        default: 'primary',
         required: false,
+    },
+
+    ui: {
+        required: false,
+        type: Object,
+        default: {} ,
     },
 });
 
@@ -115,6 +123,8 @@ function filterIsNull(filter) {
             return  Number(Math.max(...filter.value)) === Number(filter.max) && Number(Math.min(...filter.value)) === Number(filter.min)
         case 'select':
             return filter.value === ''
+      case 'toggle':
+            return false
         default:
             return !filter.value
     }
@@ -133,30 +143,21 @@ function updateNumberRangeFilter(filter) {
 }
 
 // Theme
-const commonSelectClasses = "block w-full shadow-sm text-sm border-gray-300 rounded-md"
-
 const fallbackTheme = {
-    inertia_table: {
-        table_filter: {
-            select: {
-                default: `${commonSelectClasses} focus:ring-indigo-500 focus:border-indigo-500`,
-                dootix: `${commonSelectClasses} focus:ring-cyan-500 focus:border-blue-500`,
-            },
+    select: {
+        base: "block w-full shadow-sm text-sm rounded-md",
+        color: {
+            primary: "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500",
+            dootix: "border-gray-300 focus:ring-cyan-500 focus:border-blue-500",
         },
     },
 }
 const themeVariables = inject('themeVariables');
-const getTheme = (type, name) => {
-    if (
-        "inertia_table" in themeVariables &&
-        "table_filter" in themeVariables.inertia_table &&
-        type in themeVariables.inertia_table.table_filter &&
-        name in themeVariables.inertia_table.table_filter[type]
-    ) {
-        return themeVariables.inertia_table.table_filter[type][name];
-    } else {
-        return fallbackTheme.inertia_table.table_filter[type][name];
-    }
+const getTheme = (item) => {
+    return twMerge(
+        get_theme_part([item, 'base'], fallbackTheme, themeVariables?.inertia_table?.table_filter?.select_filter, props.ui),
+        get_theme_part([item, 'color', props.color], fallbackTheme, themeVariables?.inertia_table?.table_filter?.select_filter, props.ui),
+    )
 }
 </script>
 

@@ -45,7 +45,7 @@
         :value="perPage"
         :options="perPageOptions"
         :on-change="onPerPageChange"
-        :pre-style="preStyle"
+        :color="color"
       />
       <component
         :is="nextPageUrl ? 'a' : 'div'"
@@ -87,7 +87,7 @@
           :value="perPage"
           :options="perPageOptions"
           :on-change="onPerPageChange"
-          :pre-style="preStyle"
+          :color="color"
         />
 
         <p class="hidden lg:block text-sm text-gray-700 grow">
@@ -220,9 +220,9 @@ const props = defineProps({
         type: Object,
         required: false,
     },
-    preStyle: {
+    color: {
         type: String,
-        default: 'default',
+        default: 'primary',
         required: false,
     },
 });

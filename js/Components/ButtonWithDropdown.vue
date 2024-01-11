@@ -6,10 +6,7 @@
         type="button"
         :dusk="dusk"
         :disabled="disabled"
-        :class="[
-            getTheme('button', preStyle),
-            {'cursor-not-allowed': disabled },
-        ]"
+        :class="getTheme('button')"
         aria-haspopup="true"
         @click.prevent="toggle"
       >
@@ -35,6 +32,8 @@ import { createPopper } from "@popperjs/core/lib/popper-lite";
 import preventOverflow from "@popperjs/core/lib/modifiers/preventOverflow";
 import flip from "@popperjs/core/lib/modifiers/flip";
 import {ref, watch, onMounted, inject} from "vue";
+import {get_theme_part} from "../helpers.js";
+import {twMerge} from "tailwind-merge";
 
 const emit = defineEmits(['closed'])
 
@@ -63,10 +62,16 @@ const props = defineProps({
         required: false,
     },
 
-    preStyle: {
+    color: {
         type: String,
-        default: 'default',
+        default: 'primary',
         required: false,
+    },
+
+    ui: {
+        required: false,
+        type: Object,
+        default: {} ,
     },
 });
 
@@ -103,26 +108,24 @@ defineExpose({ hide });
 // Theme
 const commonClasses = "w-full bg-white border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 border-gray-300"
 const fallbackTheme = {
-    inertia_table: {
-        button_with_dropdown: {
-            button: {
-                default: `${commonClasses} focus:ring-indigo-500`,
-                dootix: `${commonClasses} focus:ring-cyan-500`,
-            },
+    button: {
+        base: "w-full border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2",
+        color: {
+            primary: "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 focus:ring-indigo-500",
+            dootix: "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 focus:ring-cyan-500",
         },
     },
 }
 const themeVariables = inject('themeVariables');
-const getTheme = (type, name) => {
-    if (
-        "inertia_table" in themeVariables &&
-        "button_with_dropdown" in themeVariables.inertia_table &&
-        type in themeVariables.inertia_table.button_with_dropdown &&
-        name in themeVariables.inertia_table.button_with_dropdown[type]
-    ) {
-        return themeVariables.inertia_table.button_with_dropdown[type][name];
-    } else {
-        return fallbackTheme.inertia_table.button_with_dropdown[type][name];
+const getTheme = (item) => {
+    let additionalClasses = ''
+    if (item === 'button' && props.disabled) {
+        additionalClasses = 'cursor-not-allowed'
     }
+    return twMerge(
+        additionalClasses,
+        get_theme_part([item, 'base'], fallbackTheme, themeVariables?.inertia_table?.button_with_dropdown, props.ui),
+        get_theme_part([item, 'color', props.color], fallbackTheme, themeVariables?.inertia_table?.button_with_dropdown, props.ui),
+    )
 }
 </script>

@@ -32,7 +32,7 @@ This package provides a *DataTables-like* experience for [Inertia.js](https://in
 
 ## Installation
 
-You need to install both the server-side package and the client-side package. Note that this package is only compatible with Laravel 9, Vue 3.0, and requires the Tailwind Forms plugin.
+You need to install both the server-side package and the client-side package. Note that this package is only compatible with Laravel 10, Vue 3.0, and requires the Tailwind Forms plugin.
 
 ### Server-side installation (Laravel)
 

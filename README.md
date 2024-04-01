@@ -23,10 +23,10 @@ This package provides a *DataTables-like* experience for [Inertia.js](https://in
 ## Compatibility
 
 * [Vue 3](https://v3.vuejs.org/guide/installation.html)
-* [Laravel 9](https://laravel.com/)
+* [Laravel 10](https://laravel.com/)
 * [Inertia.js](https://inertiajs.com/)
 * [Tailwind CSS v3](https://tailwindcss.com/) + [Forms plugin](https://github.com/tailwindlabs/tailwindcss-forms)
-* PHP 8.0+
+* PHP 8.2+
 
 **Note**: There is currently an [issue](https://github.com/protonemedia/inertiajs-tables-laravel-query-builder/issues/69) with using this package with Vite!
 

@@ -121,7 +121,7 @@ Inertia::render('Page/Index')->table(function (InertiaTable $table) {
 
 #### Number range Filters
 
-This way, you can present the user a toggle. Under the hood, this uses the same filtering feature of the Laravel Query Builder package.
+This way, you can present the user a number range.
 
 The `numberRangeFilter` method requires two arguments: the key and the max value.
 
@@ -153,23 +153,46 @@ $users = QueryBuilder::for(/*...*/)
             ->allowedFilters([NumberRangeFilter::getQueryBuilderFilter('invoice_recall_count')]);
 ```
 
-#### Columns
+#### Custom Filters
 
-With the `column` method, you can specify which columns you want to be toggleable, sortable, and searchable. You must pass in at least a key or label for each column.
+This way, you can present the user a custom filter.
+
+The `customFilter` method requires one argument: the key.
 
 ```php
 Inertia::render('Page/Index')->table(function (InertiaTable $table) {
-    $table->column('name', 'User Name');
+    $table->customFilter('date_range');
+});
+```
 
-    $table->column(
-        key: 'name',
-        label: 'User Name',
-        canBeHidden: true,
-        hidden: false,
-        sortable: true,
-        searchable: true
+You can specify a some other params.
+```php
+Inertia::render('Page/Index')->table(function (InertiaTable $table) {
+    $table->toggleFilter(
+        key: 'date_range',
+        label: 'Date range',
+        params: ['min_date' => '2022-01-01', 'max_date' => '2022-12-31']
+        defaultValue: ['start' => '2022-01-01', 'end' => '2022-12-31'],
     );
 });
+```
+
+You need to use a custom allowed filter for this filter.
+```php
+$dateRangeFilter = AllowedFilter::custom('date_range', new DateRangeFilter());
+$users = QueryBuilder::for(/*...*/)
+            ->allowedFilters([$dateRangeFilter]);
+```
+
+For the frontend, you can use the `#custom_filter(<< your key >>)` slot to add your custom filter. You can access to the filter data (like params), the color and the onFilterChange function.
+The onFilterChange function is a function that you need to call when you want to update the filter value. You need to pass the key and the new value.
+
+```vue
+<Table>
+    <template #custom_filter(date_range)="{ filter: filter, color: color, onFilterChange: onFilterChange }">
+        <!--        Your custom filter        -->
+    </template>
+</Table>
 ```
 
 The `searchable` option is a shortcut to the `searchInput` method. The example below will essentially call `$table->searchInput('name', 'User Name')`.

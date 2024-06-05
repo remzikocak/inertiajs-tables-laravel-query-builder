@@ -67,6 +67,11 @@
               @update:model-value="updateNumberRangeFilter(filter)"
             />
           </div>
+          <div v-if="filter.type === 'custom'">
+              <slot :name="`custom_filter(${filter.key})`" :filter="filter" :on-filter-change="onFilterChange" :color="color">
+                  <p class="text-gray-500">No custom filter provided. Slot name: {{ `custom_filter(${filter.key})` }}</p>
+              </slot>
+          </div>
         </div>
       </div>
     </div>

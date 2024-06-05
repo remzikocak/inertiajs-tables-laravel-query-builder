@@ -7,6 +7,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Inertia\Response;
+use ProtoneMedia\LaravelQueryBuilderInertiaJs\Filters\CustomFilter;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\Filters\Filter;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\Filters\Filterable;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\Filters\NumberRangeFilter;
@@ -387,6 +388,29 @@ class InertiaTable
             suffix: $suffix,
             step: $step,
             value: $defaultValue,
+        ))->values();
+
+        return $this;
+    }
+
+    /**
+     * Add a custom filter to the query builder.
+     *
+     * @param string $key
+     * @param string|null $label = null
+     * @param mixed $defaultValue = null
+     * @param array $params = []
+     * @return self
+     */
+    public function customFilter(string $key, string $label = null, bool $defaultValue = null, array $params = []): self
+    {
+        $this->filters = $this->filters->reject(function (Filterable $filter) use ($key) {
+            return $filter->key === $key;
+        })->push(new CustomFilter(
+            key: $key,
+            label: $label ?: Str::headline($key),
+            value: $defaultValue,
+            params: $params,
         ))->values();
 
         return $this;

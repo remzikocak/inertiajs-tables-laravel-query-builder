@@ -44,7 +44,11 @@
               :filters="queryBuilderProps.filters"
               :on-filter-change="changeFilterValue"
               :color="color"
-            />
+            >
+                <template v-for="(_, slot) in $slots" #[slot]="slotData">
+                    <slot :name="slot" v-bind="slotData"></slot>
+                </template>
+            </TableFilter>
           </slot>
         </div>
 

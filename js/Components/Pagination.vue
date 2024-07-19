@@ -21,7 +21,7 @@
         }"
         :href="previousPageUrl"
         :dusk="previousPageUrl ? 'pagination-simple-previous' : null"
-        class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-800 text-sm font-medium rounded-md bg-white dark:bg-gray-800"
+        class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-700 text-sm font-medium rounded-md bg-white dark:bg-gray-800"
         @click.prevent="onClick(previousPageUrl)"
       >
         <svg
@@ -142,7 +142,7 @@
                 "
                 :href="link.url"
                 :dusk="link.url ? `pagination-${link.label}` : null"
-                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium text-gray-700 dark:text-gray-200"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200"
                 :class="{
                   'cursor-not-allowed': !link.url,
                   'hover:bg-gray-50 dark:hover:bg-gray-700': link.url,

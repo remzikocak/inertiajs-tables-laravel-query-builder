@@ -30,7 +30,7 @@
         v-for="(filter, key) in filters"
         :key="key"
       >
-        <h3 class="text-xs uppercase tracking-wide bg-gray-100 p-3">
+        <h3 class="text-xs uppercase tracking-wide bg-gray-100 p-3 dark:bg-gray-900 dark:divide-gray-800 dark:border dark:border-white/5 dark:text-gray-200">
           {{ filter.label }}
         </h3>
         <div class="p-2">
@@ -152,8 +152,8 @@ const fallbackTheme = {
     select: {
         base: "block w-full shadow-sm text-sm rounded-md",
         color: {
-            primary: "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500",
-            dootix: "border-gray-300 focus:ring-cyan-500 focus:border-blue-500",
+            primary: "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:divide-gray-800 dark:border dark:border-white/5 dark:text-gray-200",
+            dootix: "border-gray-300 focus:ring-cyan-500 focus:border-blue-500 dark:bg-gray-800 dark:divide-gray-800 dark:border dark:border-white/5 dark:text-gray-200",
         },
     },
 }

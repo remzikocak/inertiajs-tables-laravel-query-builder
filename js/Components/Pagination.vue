@@ -1,7 +1,7 @@
 <template>
   <nav
     v-if="hasPagination"
-    class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+    class="bg-white dark:bg-gray-900 px-4 py-3 flex items-center justify-between border-t border-gray-200 dark:border-gray-700 sm:px-6"
   >
     <p v-if="!hasData || pagination.total < 1">
       {{ translations.no_results_found }}
@@ -21,7 +21,7 @@
         }"
         :href="previousPageUrl"
         :dusk="previousPageUrl ? 'pagination-simple-previous' : null"
-        class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md bg-white"
+        class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-800 text-sm font-medium rounded-md bg-white dark:bg-gray-800"
         @click.prevent="onClick(previousPageUrl)"
       >
         <svg
@@ -50,12 +50,12 @@
       <component
         :is="nextPageUrl ? 'a' : 'div'"
         :class="{
-          'cursor-not-allowed text-gray-400': !nextPageUrl,
-          'text-gray-700 hover:text-gray-500': nextPageUrl
+          'cursor-not-allowed text-gray-400 dark:text-gray-700': !nextPageUrl,
+          'text-gray-700 hover:text-gray-500 dark:text-gray-400': nextPageUrl
         }"
         :href="nextPageUrl"
         :dusk="nextPageUrl ? 'pagination-simple-next' : null"
-        class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md bg-white"
+        class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-700 text-sm font-medium rounded-md bg-white dark:bg-gray-900"
         @click.prevent="onClick(nextPageUrl)"
       >
         <span class="hidden sm:inline mr-2">{{ translations.next }}</span>
@@ -90,7 +90,7 @@
           :color="color"
         />
 
-        <p class="hidden lg:block text-sm text-gray-700 grow">
+        <p class="hidden lg:block text-sm text-gray-700 dark:text-gray-400 grow">
           <span class="font-medium">{{ pagination.from }}</span>
           {{ translations.to }}
           <span class="font-medium">{{ pagination.to }}</span>
@@ -112,7 +112,7 @@
             }"
             :href="previousPageUrl"
             :dusk="previousPageUrl ? 'pagination-previous' : null"
-            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium"
+            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white dark:bg-gray-900 dark:border-gray-700 text-sm font-medium"
             @click.prevent="onClick(previousPageUrl)"
           >
             <span class="sr-only">{{ translations.previous }}</span>
@@ -142,12 +142,12 @@
                 "
                 :href="link.url"
                 :dusk="link.url ? `pagination-${link.label}` : null"
-                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium text-gray-700"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium text-gray-700 dark:text-gray-200"
                 :class="{
                   'cursor-not-allowed': !link.url,
-                  'hover:bg-gray-50': link.url,
-                  'bg-white': !link.active,
-                  'bg-gray-100': link.active,
+                  'hover:bg-gray-50 dark:hover:bg-gray-700': link.url,
+                  'bg-white dark:bg-gray-900': !link.active,
+                  'bg-gray-100 dark:bg-gray-800': link.active,
                 }"
                 @click.prevent="onClick(link.url)"
               >
@@ -164,7 +164,7 @@
             }"
             :href="nextPageUrl"
             :dusk="nextPageUrl ? 'pagination-next' : null"
-            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium"
+            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white dark:bg-gray-900 dark:border-gray-700 text-sm font-medium"
             @click.prevent="onClick(nextPageUrl)"
           >
             <span class="sr-only">{{ translations.next }}</span>

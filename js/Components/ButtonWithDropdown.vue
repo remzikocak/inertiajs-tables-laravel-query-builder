@@ -18,7 +18,7 @@
         ref="tooltip"
         class="absolute z-10"
       >
-        <div class="mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+        <div class="mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 dark:bg-gray-900 dark:divide-gray-800 dark:border dark:border-white/5">
           <slot />
         </div>
       </div>
@@ -111,8 +111,8 @@ const fallbackTheme = {
     button: {
         base: "w-full border rounded-md shadow-sm px-4 py-2 inline-flex justify-center text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2",
         color: {
-            primary: "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 focus:ring-indigo-500",
-            dootix: "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 focus:ring-cyan-500",
+            primary: "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-900",
+            dootix: "bg-white text-gray-700 hover:bg-gray-50 border-gray-300 focus:ring-cyan-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-900",
         },
     },
 }

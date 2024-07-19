@@ -65,10 +65,10 @@ const props = defineProps({
 // Theme
 const fallbackTheme = {
   input: {
-    base: "block w-full pl-9 text-sm rounded-md shadow-sm",
+    base: "block w-full pl-9 text-sm rounded-md shadow-sm dark:bg-gray-800",
     color: {
-      primary: "focus:ring-indigo-500 focus:border-indigo-500 border-gray-300",
-      dootix: "focus:ring-cyan-500 focus:border-blue-500 border-gray-300",
+      primary: "focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 dark:border-gray-700 dark:text-gray-300",
+      dootix: "focus:ring-cyan-500 focus:border-blue-500 border-gray-300 dark:border-gray-700 dark:text-gray-300",
     },
   },
 }

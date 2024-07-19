@@ -8,7 +8,7 @@
     <div class="flex rounded-md shadow-sm relative mt-3">
       <label
         :for="searchInput.key"
-        class="inline-flex items-center px-4 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
+        class="inline-flex items-center px-4 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-500 text-sm"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -133,8 +133,8 @@ const fallbackTheme = {
     input: {
         base: "flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md text-sm",
         color: {
-            primary: "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500",
-            dootix: "border-gray-300 focus:ring-cyan-500 focus:border-blue-500",
+            primary: "border-gray-300 dark:border-gray-700 focus:ring-indigo-500 focus:border-indigo-500",
+            dootix: "border-gray-300 dark:border-gray-700 focus:ring-cyan-500 focus:border-blue-500",
         },
     },
     remove_button: {

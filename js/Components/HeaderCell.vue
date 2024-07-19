@@ -1,7 +1,7 @@
 <template>
   <th
     v-show="!cell.hidden"
-    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900"
+    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
   >
     <component
       :is="cell.sortable ? 'button' : 'div'"

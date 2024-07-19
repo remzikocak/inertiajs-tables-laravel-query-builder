@@ -137,8 +137,8 @@
       >
         <TableWrapper :class="{ 'mt-3': !hasOnlyData }">
           <slot name="table">
-            <table class="min-w-full divide-y divide-gray-300">
-              <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+              <thead class="bg-gray-50 dark:bg-gray-900">
                 <slot
                   name="head"
                   :show="show"
@@ -163,7 +163,7 @@
                   </tr>
                 </slot>
               </thead>
-              <tbody class="divide-y divide-gray-200 bg-white">
+              <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
                 <slot
                   name="body"
                   :show="show"
@@ -174,8 +174,8 @@
                     class=""
                     :class="{
                       'bg-gray-50': striped && key % 2,
-                      'hover:bg-gray-100': striped,
-                      'hover:bg-gray-50': !striped
+                      'hover:bg-gray-100 dark:hover:bg-gray-800': striped,
+                      'hover:bg-gray-50 dark:hover:bg-gray-800': !striped
                     }"
                     @click="rowClicked($event, item, key)"
                   >

@@ -77,8 +77,8 @@ const fallbackTheme = {
     select: {
         base: "block min-w-max shadow-sm text-sm rounded-md",
         color: {
-            primary: "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500",
-            dootix: "border-gray-300 focus:ring-cyan-500 focus:border-blue-500",
+            primary: "border-gray-300 dark:border-gray-700 focus:ring-indigo-500 focus:border-indigo-500",
+            dootix: "border-gray-300 dark:border-gray-700 focus:ring-cyan-500 focus:border-blue-500",
         },
     },
 }

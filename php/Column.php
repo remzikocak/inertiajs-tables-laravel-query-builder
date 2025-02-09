@@ -13,7 +13,7 @@ class Column implements Arrayable
         public bool $hidden,
         public bool $sortable,
         public bool|string $sorted,
-        public string $cell,
+        public ?string $cell = null,
     ) {
     }
 

@@ -12,19 +12,27 @@ class Column implements Arrayable
         public bool $canBeHidden,
         public bool $hidden,
         public bool $sortable,
-        public bool|string $sorted
+        public bool|string $sorted,
+        public string $cell,
     ) {
     }
 
     public function toArray()
     {
-        return [
-            'key'           => $this->key,
-            'label'         => $this->label,
+        $columnDef = [
+            'id'   => $this->key,
+            'accessorKey'   => $this->key,
+            'header'        => $this->label,
             'can_be_hidden' => $this->canBeHidden,
             'hidden'        => $this->hidden,
             'sortable'      => $this->sortable,
             'sorted'        => $this->sorted,
         ];
+
+        if(!empty($this->cell)){
+            $columnDef['cell'] = $this->cell;
+        }
+
+        return $columnDef;
     }
 }
